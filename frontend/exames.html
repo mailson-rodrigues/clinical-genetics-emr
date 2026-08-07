@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exames - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html" class="ativo">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Exames</h1>
+        <p>Exames da consulta</p>
+      </header>
+
+      <main>
+        <section class="cartao">
+          <h2 id="tituloConsulta">Consulta</h2>
+        </section>
+
+        <section class="cartao">
+          <h2>Novo exame</h2>
+          <form id="formExame">
+            <div class="grade-formulario grade-3">
+              <div class="campo">
+                <label for="tipoExame">Tipo de exame</label>
+                <input type="text" id="tipoExame" required placeholder="Ex: Painel BRCA1/BRCA2, Cariótipo">
+              </div>
+              <div class="campo">
+                <label for="individuo">Indivíduo vinculado (opcional)</label>
+                <select id="individuo">
+                  <option value="">Paciente/consulta geral</option>
+                </select>
+                <span id="mensagemHeredograma"></span>
+              </div>
+              <div class="campo">
+                <label for="dataSolicitacao">Data da solicitação</label>
+                <input type="date" id="dataSolicitacao">
+              </div>
+            </div>
+            <div class="campo campo-largo">
+              <label for="resultado">Resultado (preencher depois que o exame retornar)</label>
+              <textarea id="resultado" rows="3" placeholder="Resultado do exame, quando disponível"></textarea>
+            </div>
+            <div class="campo campo-largo">
+              <label for="observacoes">Observações</label>
+              <textarea id="observacoes" rows="2"></textarea>
+            </div>
+            <button type="submit" class="botao">Registrar exame</button>
+            <span id="mensagemExame"></span>
+          </form>
+        </section>
+
+        <section class="cartao">
+          <h2>Exames registrados</h2>
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Indivíduo</th>
+                <th>Status</th>
+                <th>Data solicitação</th>
+                <th>Data resultado</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaExames"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="anexos.js"></script>
+  <script src="exames.js"></script>
+</body>
+</html>

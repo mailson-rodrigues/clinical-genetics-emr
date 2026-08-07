@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encaminhamentos - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html" class="ativo">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Encaminhamentos</h1>
+        <p>Encaminhamentos da consulta</p>
+      </header>
+
+      <main>
+        <section class="cartao">
+          <h2 id="tituloConsulta">Consulta</h2>
+        </section>
+
+        <section class="cartao">
+          <h2>Novo encaminhamento</h2>
+          <form id="formEncaminhamento">
+            <div class="campo">
+              <label for="especialidade">Especialidade de destino (opcional)</label>
+              <select id="especialidade">
+                <option value="">Não especificar</option>
+              </select>
+            </div>
+            <div class="campo campo-largo">
+              <label for="motivo">Motivo do encaminhamento</label>
+              <textarea id="motivo" rows="3" required placeholder="Ex: Achados no heredograma sugerem risco elevado para..."></textarea>
+            </div>
+            <button type="submit" class="botao">Registrar encaminhamento</button>
+            <span id="mensagemEncaminhamento"></span>
+          </form>
+        </section>
+
+        <section class="cartao">
+          <h2>Encaminhamentos registrados</h2>
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Especialidade</th>
+                <th>Motivo</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaEncaminhamentos"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="encaminhamentos.js"></script>
+</body>
+</html>

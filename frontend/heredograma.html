@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heredograma - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html" class="ativo">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Heredograma</h1>
+        <p>Visualização do heredograma gerado a partir da anamnese</p>
+      </header>
+
+      <main>
+        <section class="controles">
+          <label for="consultaId">ID da consulta:</label>
+          <input type="number" id="consultaId" min="1" placeholder="Ex: 1">
+          <button id="btnCarregar">Carregar heredograma</button>
+          <button id="btnExportarPdf" disabled>Exportar PDF</button>
+          <button id="btnExportarPng" disabled>Exportar Imagem (PNG)</button>
+          <span id="mensagem"></span>
+        </section>
+
+        <section class="legenda">
+          <h2>Legenda</h2>
+          <div id="legendaContainer" class="legenda-itens"></div>
+        </section>
+
+        <section class="area-heredograma">
+          <div id="heredogramaContainer"></div>
+        </section>
+
+        <section class="cartao" id="notasContainer"></section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+
+  <!--
+    jsPDF + svg2pdf.js via CDN, sem gerenciador de pacotes (padrão do
+    projeto - sem build step). svg2pdf.js precisa carregar DEPOIS do
+    jsPDF: ele estende jsPDF.API com o método `.svg()`, usado em
+    exportar-heredograma.js para inserir o heredograma no PDF como
+    conteúdo vetorial (não uma imagem rasterizada).
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.4/dist/svg2pdf.umd.min.js"></script>
+  <script src="exportar-heredograma.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

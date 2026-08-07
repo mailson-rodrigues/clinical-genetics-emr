@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logs de Auditoria - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Logs de Auditoria</h1>
+        <p>Logs de auditoria do sistema</p>
+      </header>
+
+      <main>
+        <section class="cartao" id="avisoAcessoNegado" style="display: none;">
+          <h2>Acesso restrito</h2>
+          <p>Somente administradores podem consultar os logs de auditoria.</p>
+          <a href="index.html" class="botao">Voltar para o início</a>
+        </section>
+
+        <section class="cartao" id="conteudoLogs" style="display: none;">
+          <h2>Filtros</h2>
+          <div class="grade-formulario grade-2">
+            <div class="campo">
+              <label for="filtroProfissional">Filtrar por profissional</label>
+              <select id="filtroProfissional">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label for="filtroLimite">Quantidade de registros</label>
+              <select id="filtroLimite">
+                <option value="50">Últimos 50</option>
+                <option value="100" selected>Últimos 100</option>
+                <option value="250">Últimos 250</option>
+                <option value="500">Últimos 500</option>
+              </select>
+            </div>
+          </div>
+          <button id="btnFiltrar" class="botao">Aplicar filtro</button>
+        </section>
+
+        <section class="cartao" id="tabelaContainer" style="display: none;">
+          <h2>Registros</h2>
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Profissional</th>
+                <th>Método</th>
+                <th>Caminho</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaLogs"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="logs.js"></script>
+</body>
+</html>

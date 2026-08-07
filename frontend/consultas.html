@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultas - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html" class="ativo">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Consultas</h1>
+        <p>Consultas do paciente</p>
+      </header>
+
+      <main>
+        <section class="cartao">
+          <h2 id="nomePacienteTitulo">Paciente</h2>
+          <a href="pacientes.html" class="link-acao">&larr; Voltar para pacientes</a>
+        </section>
+
+        <section class="cartao">
+          <h2>Nova consulta</h2>
+          <form id="formConsulta">
+            <div class="campo campo-largo">
+              <label for="condicao">Condição investigada</label>
+              <input type="text" id="condicao" required placeholder="Ex: Predisposição hereditária a câncer">
+            </div>
+            <button type="submit" class="botao">Iniciar nova consulta</button>
+            <span id="mensagemConsulta"></span>
+          </form>
+        </section>
+
+        <section class="cartao">
+          <h2>Consultas registradas</h2>
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Condição investigada</th>
+                <th>Status</th>
+                <th>Criada em</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="corpoTabelaConsultas"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="consultas.js"></script>
+</body>
+</html>

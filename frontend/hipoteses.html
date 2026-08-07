@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hipóteses Diagnósticas - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Hipóteses Diagnósticas</h1>
+        <p>Hipóteses geradas por IA a partir da anamnese, com fontes científicas</p>
+      </header>
+
+      <main>
+        <section class="cartao">
+          <h2 id="tituloConsulta">Consulta</h2>
+        </section>
+
+        <div class="aviso-etico">
+          <p>
+            Esta é uma sugestão gerada por inteligência artificial, com base no
+            padrão de heredograma e no histórico clínico registrado. Ela serve
+            como apoio à investigação — não é um diagnóstico.
+          </p>
+          <p>
+            A confirmação (ou exclusão) desta hipótese deve ser feita por um
+            profissional habilitado, devidamente registrado em seu conselho de
+            classe, seguindo os protocolos clínicos e a legislação vigente.
+            Nenhuma decisão médica, teste genético confirmatório ou conduta
+            terapêutica deve se basear exclusivamente nesta sugestão.
+          </p>
+        </div>
+
+        <section class="cartao">
+          <button id="btnGerarHipoteses" class="botao">Gerar hipóteses com IA</button>
+          <span id="mensagemGeracao"></span>
+        </section>
+
+        <section class="cartao">
+          <h2>Hipóteses levantadas</h2>
+          <div id="listaHipoteses">
+            <p>Nenhuma hipótese gerada ainda.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="hipoteses.js"></script>
+</body>
+</html>

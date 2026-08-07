@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html" class="ativo">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Início</h1>
+        <p>Sistema de apoio ao aconselhamento genético</p>
+      </header>
+
+      <main>
+        <section class="cartao">
+          <h2>Bem-vindo</h2>
+          <p>
+            Use o menu ao lado para cadastrar pacientes, conduzir a
+            anamnese genética e gerar heredogramas automaticamente a
+            partir das respostas coletadas.
+          </p>
+        </section>
+
+        <div class="grade-formulario" id="gradeIndicadores">
+          <a href="pacientes.html" class="cartao-estatistica">
+            <span class="cartao-estatistica-numero" id="numPacientesAtivos">-</span>
+            <span class="cartao-estatistica-rotulo">Pacientes ativos</span>
+          </a>
+          <a href="pacientes.html" class="cartao-estatistica">
+            <span class="cartao-estatistica-numero" id="numConsultasMes">-</span>
+            <span class="cartao-estatistica-rotulo">Consultas este mês</span>
+          </a>
+          <a href="pacientes.html" class="cartao-estatistica">
+            <span class="cartao-estatistica-numero" id="numEncaminhamentosPendentes">-</span>
+            <span class="cartao-estatistica-rotulo">Encaminhamentos pendentes</span>
+          </a>
+          <a href="pacientes.html" class="cartao-estatistica">
+            <span class="cartao-estatistica-numero" id="numExamesAguardando">-</span>
+            <span class="cartao-estatistica-rotulo">Exames aguardando resultado</span>
+          </a>
+        </div>
+
+        <section class="cartao">
+          <h2>Atividade recente</h2>
+          <div id="listaAtividadeRecente">
+            <p>Carregando...</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogos - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Catálogos</h1>
+        <p>Catálogos (CID e Operadoras)</p>
+      </header>
+
+      <main>
+        <section class="cartao" id="avisoAcessoNegado" style="display: none;">
+          <h2>Acesso restrito</h2>
+          <p>Somente administradores podem gerenciar os catálogos.</p>
+          <a href="index.html" class="botao">Voltar para o início</a>
+        </section>
+
+        <section id="conteudoCatalogos" style="display: none;">
+          <section class="cartao">
+            <h2>Novo código CID</h2>
+            <form id="formCid">
+              <div class="grade-formulario grade-3">
+                <div class="campo">
+                  <label for="codigoCid">Código</label>
+                  <input type="text" id="codigoCid" required placeholder="Ex: C61">
+                </div>
+                <div class="campo">
+                  <label for="capituloCid">Capítulo (opcional)</label>
+                  <input type="text" id="capituloCid" placeholder="Ex: Neoplasias">
+                </div>
+                <div class="campo">
+                  <label for="versaoCid">Versão</label>
+                  <select id="versaoCid">
+                    <option value="CID-10" selected>CID-10</option>
+                    <option value="CID-11">CID-11</option>
+                  </select>
+                </div>
+              </div>
+              <div class="campo campo-largo">
+                <label for="descricaoCid">Descrição</label>
+                <input type="text" id="descricaoCid" required placeholder="Ex: Neoplasia maligna da próstata">
+              </div>
+              <button type="submit" class="botao">Cadastrar CID</button>
+              <span id="mensagemCid"></span>
+            </form>
+          </section>
+
+          <section class="cartao">
+            <h2>Códigos CID cadastrados</h2>
+            <div class="grade-formulario grade-2">
+              <div class="campo">
+                <label for="buscaCid">Buscar</label>
+                <input type="text" id="buscaCid" placeholder="Filtrar por código ou descrição">
+              </div>
+              <div class="campo">
+                <label for="filtroVersaoCid">Versão</label>
+                <select id="filtroVersaoCid">
+                  <option value="">Todas</option>
+                  <option value="CID-10">CID-10</option>
+                  <option value="CID-11">CID-11</option>
+                </select>
+              </div>
+            </div>
+            <table class="tabela">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Descrição</th>
+                  <th>Capítulo</th>
+                  <th>Versão</th>
+                </tr>
+              </thead>
+              <tbody id="corpoTabelaCid"></tbody>
+            </table>
+          </section>
+
+          <section class="cartao">
+            <h2>Nova operadora</h2>
+            <form id="formOperadora">
+              <div class="campo campo-largo">
+                <label for="nomeOperadora">Nome</label>
+                <input type="text" id="nomeOperadora" required placeholder="Ex: Unimed">
+              </div>
+              <button type="submit" class="botao">Cadastrar operadora</button>
+              <span id="mensagemOperadora"></span>
+            </form>
+          </section>
+
+          <section class="cartao">
+            <h2>Operadoras cadastradas</h2>
+            <table class="tabela">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                </tr>
+              </thead>
+              <tbody id="corpoTabelaOperadora"></tbody>
+            </table>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="catalogos.js"></script>
+</body>
+</html>

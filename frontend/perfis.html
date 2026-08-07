@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfis de Acesso - Heredograma IA</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="layout">
+    <button
+      id="btnMenuMobile"
+      class="botao-menu-mobile"
+      type="button"
+      aria-label="Abrir menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-marca">
+        <span class="sidebar-marca-titulo">Heredograma IA</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+        <div class="sidebar-grupo">
+          <a href="index.html">Início</a>
+        </div>
+
+        <div class="sidebar-grupo">
+          <p class="sidebar-titulo-grupo">Atendimento</p>
+          <a href="pacientes.html">Pacientes</a>
+        </div>
+
+        <div class="sidebar-grupo" id="grupoConfiguracao" hidden>
+          <p class="sidebar-titulo-grupo">Configuração</p>
+        </div>
+      </nav>
+
+      <div class="sidebar-usuario">
+        <span>Olá, <strong id="nomeUsuarioLogado"></strong></span>
+        <button id="btnLogout" class="link-botao">Sair</button>
+      </div>
+    </aside>
+
+    <div class="conteudo-principal">
+      <header class="cabecalho-pagina">
+        <h1>Perfis de Acesso</h1>
+        <p>Perfis de acesso</p>
+      </header>
+
+      <main>
+        <section class="cartao" id="avisoAcessoNegado" style="display: none;">
+          <h2>Acesso restrito</h2>
+          <p>Somente administradores podem gerenciar perfis de acesso.</p>
+          <a href="index.html" class="botao">Voltar para o início</a>
+        </section>
+
+        <section class="cartao" id="conteudoPerfis" style="display: none;">
+          <section class="cartao">
+            <h2>Novo perfil de acesso</h2>
+            <form id="formPerfil">
+              <div class="campo campo-largo">
+                <label for="nomePerfil">Nome</label>
+                <input type="text" id="nomePerfil" required placeholder="Ex: Recepcionista">
+              </div>
+              <div class="campo campo-largo">
+                <label for="descricaoPerfil">Descrição (opcional)</label>
+                <textarea id="descricaoPerfil" rows="2"></textarea>
+              </div>
+              <button type="submit" class="botao">Criar perfil</button>
+              <span id="mensagemPerfil"></span>
+            </form>
+          </section>
+
+          <section class="cartao">
+            <h2>Perfis cadastrados</h2>
+            <p>Marque os módulos que cada perfil pode acessar.</p>
+            <div id="listaPerfis"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script>
+    exigirLogin();
+    inicializarBarraUsuario();
+  </script>
+  <script src="perfis.js"></script>
+</body>
+</html>

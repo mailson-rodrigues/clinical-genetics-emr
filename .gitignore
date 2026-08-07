@@ -1,0 +1,32 @@
+venv/
+.env
+__pycache__/
+*.pyc
+heredograma.db
+test_heredograma.db
+test_e2e.db
+.pytest_cache/
+uploads/
+test_uploads/
+# --- Backups de banco (dados clinicos - LGPD) ---
+*.db
+*.db-journal
+*.db-wal
+*.db.bak*
+*.sqlite
+*.sqlite3
+
+# --- Artefatos e analises ---
+*.zip
+
+# --- Ferramentas e IDEs ---
+.claude/
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+
+# --- Ambientes virtuais alternativos ---
+.venv/
+env/

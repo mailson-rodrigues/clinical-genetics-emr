@@ -30,3 +30,4 @@ desktop.ini
 # --- Ambientes virtuais alternativos ---
 .venv/
 env/
+LOG_AUTONOMO.md

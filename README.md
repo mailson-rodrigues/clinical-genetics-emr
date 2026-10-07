@@ -182,7 +182,7 @@ Interactive API docs at `http://localhost:8000/docs`.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+PolyForm Noncommercial License 1.0.0 — see [LICENSE](LICENSE). Source-available: reading and noncommercial use are allowed; commercial use or redistribution requires written permission from the author. Versions published before 2026-10-07 were released under the MIT license.
 
 ## Author
 

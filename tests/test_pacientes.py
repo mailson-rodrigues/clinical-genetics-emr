@@ -124,8 +124,8 @@ def test_remover_paciente_sem_ser_admin(client, paciente_exemplo, profissional_t
 
 def test_remover_paciente_como_admin(client, paciente_exemplo, admin_token):
     """
-    Remoção é soft delete: o registro continua existindo (buscável por id,
-    com ativo=False), mas some da listagem padrão.
+    Removal is a soft delete: the record still exists (searchable by id,
+    with ativo=False), but disappears from the default listing.
     """
     resposta = client.delete(
         f"/pacientes/{paciente_exemplo['id']}",

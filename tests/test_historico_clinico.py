@@ -59,7 +59,7 @@ def test_criar_listar_e_remover_cirurgia(client, paciente_exemplo, profissional_
 
 
 # =====================================================================
-# Históricos clínicos
+# Clinical histories
 # =====================================================================
 
 def test_criar_historico_sem_login(client, paciente_exemplo):
@@ -87,7 +87,7 @@ def test_criar_listar_e_remover_historico(client, paciente_exemplo, profissional
 
 
 # =====================================================================
-# Doenças (com vínculo opcional a CID)
+# Diseases (with optional link to a CID)
 # =====================================================================
 
 def test_criar_doenca_sem_login(client, paciente_exemplo):

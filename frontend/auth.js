@@ -1,6 +1,6 @@
 // =====================================================================
-// Utilitário de autenticação, compartilhado por todas as páginas.
-// Deve ser incluído ANTES do script específico de cada página.
+// Authentication utility, shared by all pages.
+// Must be included BEFORE each page's specific script.
 // =====================================================================
 
 const CHAVE_TOKEN = "heredograma_ia_token";
@@ -72,12 +72,12 @@ async function fetchAutenticado(url, opcoes = {}) {
 }
 
 // =====================================================================
-// Injeta os links do grupo "Configuração" na barra lateral
-// (#grupoConfiguracao, ver *.html), visíveis só para administradores -
-// evita precisar editar a sidebar de cada página HTML manualmente
-// sempre que criamos uma tela restrita a admin. Lista de links (em vez
-// de um único link fixo) para não precisar duplicar essa lógica a cada
-// nova tela admin-only (ex: Logs, Perfis, Catálogos).
+// Injects the links of the "Configuração" group into the sidebar
+// (#grupoConfiguracao, see *.html), visible only to administrators -
+// avoids having to edit the sidebar of each HTML page manually
+// every time we create an admin-restricted screen. A list of links (instead
+// of a single fixed link) so this logic does not need to be duplicated for each
+// new admin-only screen (e.g.: Logs, Perfis, Catálogos).
 // =====================================================================
 const LINKS_CONFIGURACAO_SIDEBAR = [
   { href: "profissionais.html", texto: "Profissionais" },
@@ -105,7 +105,7 @@ function montarSidebarConfiguracao() {
 }
 
 // =====================================================================
-// Menu hambúrguer (mobile) da barra lateral.
+// Hamburger menu (mobile) of the sidebar.
 // =====================================================================
 function inicializarMenuMobile() {
   const botao = document.getElementById("btnMenuMobile");

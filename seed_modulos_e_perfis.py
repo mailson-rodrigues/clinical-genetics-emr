@@ -1,15 +1,15 @@
 """
-Popula o catálogo de módulos e os perfis de acesso padrão, e atribui o
-perfil mais permissivo (Médico(a)/Geneticista) a profissionais
-"profissional" já cadastrados que ainda não têm nenhum perfil - evita
-que profissionais existentes percam acesso de repente com a chegada
-dos Perfis de Acesso granulares. Administradores não usam perfil
-(continuam com acesso total via nivel_acesso == "administrador").
+Populates the catalog of modules and the default access profiles, and assigns the
+most permissive profile (Médico(a)/Geneticista) to already registered
+"profissional" users that do not yet have any profile - this prevents
+existing professionals from suddenly losing access with the arrival
+of the granular Access Profiles. Administrators do not use profiles
+(they keep full access via nivel_acesso == "administrador").
 
-Pressupõe que as tabelas já existem (criadas via Alembic:
+Assumes the tables already exist (created via Alembic:
 `alembic upgrade head`).
 
-Como rodar:
+How to run:
     python seed_modulos_e_perfis.py
 """
 

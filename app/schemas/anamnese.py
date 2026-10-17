@@ -16,8 +16,8 @@ class PerguntaResponse(BaseModel):
 class ConsultaCreate(BaseModel):
     paciente_id: int
     condicao_investigada: str
-    # profissional_id NAO e enviado pelo cliente - e definido automaticamente
-    # a partir do token de autenticacao (ver app/routes/consulta.py)
+    # profissional_id is NOT sent by the client - it is set automatically
+    # from the authentication token (see app/routes/consulta.py)
 
 
 class ConsultaUpdate(BaseModel):

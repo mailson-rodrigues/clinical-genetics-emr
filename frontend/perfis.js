@@ -1,7 +1,7 @@
 let modulosDisponiveis = [];
 
 // =====================================================================
-// Verifica permissão antes de mostrar qualquer conteúdo
+// Checks permission before showing any content
 // =====================================================================
 function verificarPermissao() {
   if (!ehAdministrador()) {
@@ -13,7 +13,7 @@ function verificarPermissao() {
 }
 
 // =====================================================================
-// Carrega o catálogo de módulos (usado para montar os checkboxes)
+// Loads the module catalog (used to build the checkboxes)
 // =====================================================================
 async function carregarModulos() {
   const resposta = await fetchAutenticado("/modulos/");
@@ -21,8 +21,8 @@ async function carregarModulos() {
 }
 
 // =====================================================================
-// Carrega e renderiza os perfis cadastrados, cada um com checkboxes
-// dos módulos disponíveis (marcados conforme já vinculados)
+// Loads and renders the registered profiles, each with checkboxes
+// for the available modules (checked according to what is already linked)
 // =====================================================================
 async function carregarPerfis() {
   const container = document.getElementById("listaPerfis");
@@ -78,7 +78,7 @@ async function carregarPerfis() {
 }
 
 // =====================================================================
-// Vincula/desvincula um módulo ao marcar/desmarcar o checkbox
+// Links/unlinks a module when the checkbox is checked/unchecked
 // =====================================================================
 async function alternarModulo(checkbox) {
   const perfilId = checkbox.dataset.perfilId;
@@ -130,7 +130,7 @@ async function removerPerfil(perfilId) {
 }
 
 // =====================================================================
-// Cria um novo perfil de acesso
+// Creates a new access profile
 // =====================================================================
 document.getElementById("formPerfil").addEventListener("submit", async (evento) => {
   evento.preventDefault();
@@ -165,7 +165,7 @@ document.getElementById("formPerfil").addEventListener("submit", async (evento) 
 });
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (verificarPermissao()) {
   carregarModulos().then(carregarPerfis);

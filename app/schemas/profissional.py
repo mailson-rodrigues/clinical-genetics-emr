@@ -20,8 +20,8 @@ class ProfissionalCreate(BaseModel):
     senha: str
     especialidade_id: Optional[int] = None
     registro_profissional: Optional[str] = None
-    nivel_acesso: str = "profissional"  # "profissional" ou "administrador"
-    perfil_acesso_id: Optional[int] = None  # só relevante quando nivel_acesso == "profissional"
+    nivel_acesso: str = "profissional"  # "profissional" or "administrador"
+    perfil_acesso_id: Optional[int] = None  # only relevant when nivel_acesso == "profissional"
 
 
 class ProfissionalUpdate(BaseModel):

@@ -5,15 +5,15 @@ from playwright.sync_api import expect
 
 def test_cadastrar_especialidade_pelo_modal(pagina_logada_admin):
     """
-    Testa o botão "+" ao lado do <select> de especialidade em
-    profissionais.html: abre o modal (<dialog>), cadastra uma
-    especialidade nova (POST /especialidades/) e confirma que ela
-    aparece já selecionada no formulário, sem precisar recarregar a
-    página manualmente.
+    Tests the "+" button next to the specialty <select> in
+    profissionais.html: opens the modal (<dialog>), registers a new
+    specialty (POST /especialidades/) and confirms that it
+    appears already selected in the form, without needing to reload the
+    page manually.
     """
     page = pagina_logada_admin
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/profissionais.html", wait_until="domcontentloaded")
 
     nome_especialidade = f"Especialidade E2E {uuid.uuid4().hex[:8]}"

@@ -3,8 +3,8 @@ import uuid
 
 def test_cadastrar_cid_e_operadora_pela_tela(pagina_logada_admin):
     page = pagina_logada_admin
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/catalogos.html", wait_until="domcontentloaded")
 
     sufixo = uuid.uuid4().hex[:8]

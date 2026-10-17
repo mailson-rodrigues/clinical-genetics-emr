@@ -43,12 +43,12 @@ def test_login_com_email_inexistente(client, db_session):
 
 def test_login_bloqueia_apos_10_tentativas_por_minuto(client, db_session):
     """
-    Rate limiting (10/minute por IP, ver @limiter.limit em
-    app/routes/auth.py) contra força bruta de senha. O resultado de cada
-    tentativa individual não importa (aqui todas erram a senha de
-    propósito) - o que importa é que a 11ª tentativa dentro da mesma
-    janela de 1 minuto seja barrada com 429 antes mesmo de chegar à
-    verificação de senha.
+    Rate limiting (10/minute per IP, see @limiter.limit in
+    app/routes/auth.py) against password brute force. The result of each
+    individual attempt does not matter (here they all get the password wrong
+    on purpose) - what matters is that the 11th attempt within the same
+    1-minute window is blocked with 429 even before reaching the
+    password check.
     """
     _criar_profissional(db_session, email="dra.teste@exemplo.com", senha="senha123")
 

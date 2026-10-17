@@ -83,11 +83,11 @@
   </script>
 
   <!--
-    jsPDF + svg2pdf.js via CDN, sem gerenciador de pacotes (padrão do
-    projeto - sem build step). svg2pdf.js precisa carregar DEPOIS do
-    jsPDF: ele estende jsPDF.API com o método `.svg()`, usado em
-    exportar-heredograma.js para inserir o heredograma no PDF como
-    conteúdo vetorial (não uma imagem rasterizada).
+    jsPDF + svg2pdf.js via CDN, without a package manager (project
+    standard - no build step). svg2pdf.js must load AFTER
+    jsPDF: it extends jsPDF.API with the `.svg()` method, used in
+    exportar-heredograma.js to insert the pedigree into the PDF as
+    vector content (not a rasterized image).
   -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.4/dist/svg2pdf.umd.min.js"></script>

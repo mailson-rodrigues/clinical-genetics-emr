@@ -74,7 +74,7 @@ main {
   padding: 0;
 }
 
-/* ===== Layout com barra lateral (páginas já migradas ao novo design) ===== */
+/* ===== Layout with sidebar (pages already migrated to the new design) ===== */
 .layout {
   display: flex;
   min-height: 100vh;
@@ -228,9 +228,9 @@ main {
     transform: translateX(0);
   }
 
-  /* Evita que o texto da marca fique atrás do botão hambúrguer
-     (position: fixed, sempre por cima) quando a sidebar abre por cima
-     do conteúdo. */
+  /* Prevents the brand text from going behind the hamburger button
+     (position: fixed, always on top) when the sidebar opens over
+     the content. */
   .sidebar.sidebar-aberta .sidebar-marca {
     padding-left: 4.2rem;
   }
@@ -244,7 +244,7 @@ main {
   }
 }
 
-/* ===== Cartões genéricos ===== */
+/* ===== Generic cards ===== */
 .cartao {
   background: var(--cor-superficie);
   padding: 1.4rem;
@@ -267,7 +267,7 @@ main {
   padding-bottom: 0.3rem;
 }
 
-/* ===== Etiqueta clínica (elemento de assinatura para códigos curtos) ===== */
+/* ===== Clinical tag (signature element for short codes) ===== */
 .codigo-clinico {
   font-family: var(--fonte-codigo);
   font-size: 0.85em;
@@ -278,7 +278,7 @@ main {
   display: inline-block;
 }
 
-/* ===== Formulários ===== */
+/* ===== Forms ===== */
 .campo {
   margin-bottom: 0.8rem;
   display: flex;
@@ -291,14 +291,14 @@ main {
 }
 
 /* =====================================================================
-   Grade de formulário - padrão reutilizável para agrupar campos
-   relacionados lado a lado em formulários de cadastro (ver
-   pacientes.html). Base (sem variante): responsiva via auto-fit, sem
-   contagem fixa de colunas (ideal para linhas com 1 campo sozinho -
-   que assim ocupa a linha toda - ou linhas com mais campos que não
-   precisam de contagem exata). .grade-2/.grade-3: contagem FIXA de
-   colunas, para quando o agrupamento precisa ser sempre aquele número
-   de campos por linha, independente da largura disponível.
+   Form grid - reusable pattern to group related fields
+   side by side in registration forms (see
+   pacientes.html). Base (no variant): responsive via auto-fit, with no fixed
+   column count (ideal for rows with 1 lone field -
+   which then takes the whole row - or rows with more fields that do not
+   need an exact count). .grade-2/.grade-3: FIXED column
+   count, for when the grouping must always be that number
+   of fields per row, regardless of the available width.
    ===================================================================== */
 .grade-formulario {
   display: grid;
@@ -327,7 +327,7 @@ main {
   }
 }
 
-/* Linha com um campo de busca e uma ação principal lado a lado (ver pacientes.html). */
+/* Row with a search field and a primary action side by side (see pacientes.html). */
 .barra-acoes {
   display: flex;
   align-items: flex-end;
@@ -375,8 +375,8 @@ main {
   width: auto;
 }
 
-/* Campo com um botão de ação colado ao lado (ex: "+" para cadastrar
-   um item novo direto de um <select>, ver profissionais.html). */
+/* Field with an action button attached beside it (e.g.: "+" to register
+   a new item directly from a <select>, see profissionais.html). */
 .campo-com-botao {
   display: flex;
   gap: 0.5rem;
@@ -612,8 +612,8 @@ dialog .botao-secundario {
   margin: 0.4rem 0;
 }
 
-/* ===== Aviso ético/legal (hipoteses.html) - sempre visível, nunca um
-   rodapé discreto: hipóteses geradas por IA não são diagnóstico. ===== */
+/* ===== Ethical/legal notice (hipoteses.html) - always visible, never a
+   discreet footer: AI-generated hypotheses are not a diagnosis. ===== */
 .aviso-etico {
   background: var(--cor-perigo-claro);
   border: 2px solid var(--cor-perigo);

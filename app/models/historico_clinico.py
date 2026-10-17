@@ -17,7 +17,7 @@ class Doenca(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     paciente_id = Column(Integer, ForeignKey("pacientes.id"), nullable=False)
-    cid_id = Column(Integer, ForeignKey("cids.id"), nullable=True)  # vínculo opcional com o catálogo CID
+    cid_id = Column(Integer, ForeignKey("cids.id"), nullable=True)  # optional link to the CID catalog
     descricao = Column(Text, nullable=False)
     criado_em = Column(DateTime(timezone=True), server_default=func.now())
 

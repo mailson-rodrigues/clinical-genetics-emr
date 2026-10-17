@@ -1,4 +1,4 @@
-"""adiciona campo ativo em pacientes (soft delete)
+"""adds ativo field to pacientes (soft delete)
 
 Revision ID: 24d356e03b5c
 Revises: 54e372437a1b

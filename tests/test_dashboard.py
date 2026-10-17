@@ -42,10 +42,10 @@ def test_resumo_dashboard_conta_apenas_o_que_deve(client, db_session, profission
     agora = datetime.now(timezone.utc)
     algum_dia_do_mes_passado = agora.replace(day=1) - timedelta(days=5)
 
-    # criado_em explícito (em vez de confiar no relógio real em sequência)
-    # para a ordenação "mais recente primeiro" não depender da precisão de
-    # timestamp do SQLite - dois inserts na mesma sessão de teste podem
-    # cair no mesmo segundo e empatar.
+    # explicit criado_em (instead of relying on the real clock in sequence)
+    # so the "most recent first" ordering does not depend on the
+    # timestamp precision of SQLite - two inserts in the same test session may
+    # land in the same second and tie.
     consulta_mes_atual_1 = _criar_consulta(db_session, paciente_ativo_1, "Condição A", criado_em=agora - timedelta(minutes=5))
     consulta_mes_atual_2 = _criar_consulta(db_session, paciente_ativo_2, "Condição B", criado_em=agora)
     _criar_consulta(db_session, paciente_ativo_1, "Condição do mês passado", criado_em=algum_dia_do_mes_passado)
@@ -64,18 +64,18 @@ def test_resumo_dashboard_conta_apenas_o_que_deve(client, db_session, profission
     assert resposta.status_code == 200
     corpo = resposta.json()
 
-    # 2 pacientes ativos - o inativo não conta
+    # 2 active patients - the inactive one does not count
     assert corpo["total_pacientes_ativos"] == 2
-    # 2 consultas deste mês - a do mês passado não conta
+    # 2 consultations this month - last month's does not count
     assert corpo["consultas_mes_atual"] == 2
-    # 1 encaminhamento pendente - o concluído não conta
+    # 1 pending referral - the completed one does not count
     assert corpo["encaminhamentos_pendentes"] == 1
-    # 2 exames aguardando (solicitado + em_andamento) - o concluído não conta
+    # 2 exams waiting (solicitado + em_andamento) - the completed one does not count
     assert corpo["exames_aguardando"] == 2
 
     assert len(corpo["atividade_recente"]) == 3
     nomes_atividade = [item["paciente_nome"] for item in corpo["atividade_recente"]]
-    assert nomes_atividade[0] == "Ativo Dois"  # mais recente primeiro
+    assert nomes_atividade[0] == "Ativo Dois"  # most recent first
 
 
 def test_resumo_dashboard_sem_dados(client, profissional_token):

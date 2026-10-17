@@ -7,10 +7,10 @@ from conftest import cadastrar_paciente_via_ui
 
 def test_upload_anexo_paciente_aparece_na_lista(pagina_logada_admin):
     """
-    Fluxo de upload de documentos anexados na tela de edição de
-    paciente: envia um arquivo mínimo (buffer em memória via
-    set_input_files, sem precisar de um arquivo fixture em disco) e
-    confirma que ele aparece na lista logo depois.
+    Document attachment upload flow on the patient edit screen:
+    sends a minimal file (in-memory buffer via
+    set_input_files, with no need for a fixture file on disk) and
+    confirms that it appears in the list right afterwards.
     """
     page = pagina_logada_admin
 

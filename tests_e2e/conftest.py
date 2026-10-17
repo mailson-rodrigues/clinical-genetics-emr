@@ -15,9 +15,9 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 CAMINHO_BANCO_E2E = RAIZ_PROJETO / "test_e2e.db"
 CAMINHO_UPLOADS_E2E = RAIZ_PROJETO / "test_uploads_e2e"
 
-# Banco SQLite isolado, exclusivo dos testes E2E - nunca o heredograma.db
-# real (dev) nem o test_heredograma.db usado pelos testes de backend em
-# tests/ (que rodam em processo, sem subir servidor de verdade).
+# Isolated SQLite database, exclusive to the E2E tests - never the real
+# (dev) heredograma.db nor the test_heredograma.db used by the backend tests in
+# tests/ (which run in-process, without starting a real server).
 DATABASE_URL_E2E = f"sqlite:///{CAMINHO_BANCO_E2E.as_posix()}"
 
 PORTA_SERVIDOR_E2E = 8001
@@ -26,9 +26,9 @@ URL_BASE_E2E = f"http://127.0.0.1:{PORTA_SERVIDOR_E2E}"
 
 def _remover_banco_e2e():
     """
-    No Windows, o SO pode levar um instante para liberar o handle do
-    arquivo SQLite depois que o processo do uvicorn é terminado - tenta
-    algumas vezes antes de desistir, em vez de falhar o teardown.
+    On Windows, the OS may take a moment to release the handle of the
+    SQLite file after the uvicorn process is terminated - retries
+    a few times before giving up, instead of failing the teardown.
     """
     if not CAMINHO_BANCO_E2E.exists():
         return
@@ -43,7 +43,7 @@ def _remover_banco_e2e():
 
 
 def _aguardar_servidor_pronto(processo, timeout=30):
-    """Faz polling em /api/status até o servidor responder, ou falha com um erro claro."""
+    """Polls /api/status until the server answers, or fails with a clear error."""
     prazo_final = time.time() + timeout
     while time.time() < prazo_final:
         if processo.poll() is not None:
@@ -67,11 +67,11 @@ def _aguardar_servidor_pronto(processo, timeout=30):
 @pytest.fixture(scope="session", autouse=True)
 def servidor_e2e():
     """
-    Sobe a aplicação real (uvicorn) num processo separado, num banco
-    SQLite temporário e isolado, para os testes E2E (Playwright)
-    exercitarem o sistema de ponta a ponta com um único comando - sem
-    precisar de nenhum terminal manual, servidor já rodando, ou banco
-    pré-existente.
+    Starts the real application (uvicorn) in a separate process, on a temporary,
+    isolated SQLite database, so the E2E tests (Playwright)
+    exercise the system end to end with a single command - without
+    needing any manual terminal, an already-running server, or a
+    pre-existing database.
     """
     _remover_banco_e2e()
     shutil.rmtree(CAMINHO_UPLOADS_E2E, ignore_errors=True)
@@ -93,10 +93,10 @@ def servidor_e2e():
             f"stdout:\n{resultado_migracao.stdout}\nstderr:\n{resultado_migracao.stderr}"
         )
 
-    # As migrações só criam o schema (tabelas vazias) - o roteiro de
-    # anamnese é populado à parte (mesmo processo usado em produção, ver
-    # seed_perguntas.py), necessário para os testes de fluxo de
-    # anamnese/heredograma terem perguntas reais para responder na UI.
+    # The migrations only create the schema (empty tables) - the anamnesis
+    # script is populated separately (same process used in production, see
+    # seed_perguntas.py), needed so the anamnesis/pedigree
+    # flow tests have real questions to answer in the UI.
     resultado_seed = subprocess.run(
         [sys.executable, "seed_perguntas.py"],
         cwd=RAIZ_PROJETO,
@@ -114,15 +114,15 @@ def servidor_e2e():
         [
             sys.executable, "-m", "uvicorn", "app.main:app",
             "--port", str(PORTA_SERVIDOR_E2E),
-            # O padrão do uvicorn é fechar conexões keep-alive ociosas após
-            # só 5s. Testes de UI têm pausas reais entre ações (preencher
-            # campos, esperar elementos) que podem passar disso - quando o
-            # navegador tenta reaproveitar uma conexão que o servidor
-            # acabou de fechar por inatividade, a requisição fica
-            # pendurada até o timeout do Playwright (era exatamente esse
+            # The uvicorn default is to close idle keep-alive connections after
+            # only 5s. UI tests have real pauses between actions (filling in
+            # fields, waiting for elements) that may exceed that - when the
+            # browser tries to reuse a connection that the server
+            # has just closed for inactivity, the request hangs
+            # until the Playwright timeout (it was exactly this
             # o sintoma: page.goto/reload/wait_for_url travando sempre a
-            # partir do 2º teste da sessão, nunca reproduzível via chamadas
-            # HTTP puras - só via navegador real, com pausas reais).
+            # from the 2nd test of the session onward, never reproducible via pure HTTP
+            # calls - only via a real browser, with real pauses).
             "--timeout-keep-alive", "120",
         ],
         cwd=RAIZ_PROJETO,
@@ -148,11 +148,11 @@ def servidor_e2e():
 @pytest.fixture(scope="session")
 def base_url():
     """
-    Sobrescreve o fixture `base_url` do pytest-playwright: em vez de
-    depender da flag de linha de comando --base-url, aponta sempre para
-    o servidor E2E local (porta 8001, diferente da 8000 do servidor de
-    desenvolvimento, para não haver conflito se os dois estiverem de pé
-    ao mesmo tempo).
+    Overrides the pytest-playwright `base_url` fixture: instead of
+    depending on the --base-url command-line flag, it always points to
+    the local E2E server (port 8001, different from 8000 of the development
+    server, so there is no conflict if both are up
+    at the same time).
     """
     return URL_BASE_E2E
 
@@ -160,8 +160,8 @@ def base_url():
 @pytest.fixture
 def login_admin():
     """
-    Cria um profissional administrador via API (nesse banco E2E isolado,
-    não pressupõe que ele já exista) e retorna suas credenciais + token.
+    Creates an administrator professional via API (in this isolated E2E database,
+    does not assume it already exists) and returns their credentials + token.
     """
     email = f"admin.e2e.{uuid.uuid4().hex[:8]}@exemplo.com"
     senha = "senha123"
@@ -200,17 +200,17 @@ def login_admin():
 @pytest.fixture
 def pagina_logada_admin(page, login_admin):
     """
-    Faz login como administrador através da própria UI (tela de login),
-    deixando `page` com sessão ativa (token no localStorage) - reutilizável
-    por qualquer teste de fluxo que precise começar já logado.
+    Logs in as administrator through the UI itself (login screen),
+    leaving `page` with an active session (token in localStorage) - reusable
+    by any flow test that needs to start already logged in.
     """
-    # wait_until="domcontentloaded" (em vez do padrão "load"): neste
+    # wait_until="domcontentloaded" (instead of the default "load"): in this
     # ambiente, o evento "load" às vezes nunca dispara (algum sub-recurso
-    # parece nunca "terminar" do ponto de vista do Chromium), enquanto o
-    # DOM em si já está pronto e funcional bem antes disso. Confirmado
-    # via depuração: chamadas HTTP puras (sem navegador) para essas
-    # mesmas páginas sempre respondem rápido - o travamento é específico
-    # do `goto`/`reload` esperando por "load".
+    # seems to never "finish" from Chromium's point of view), while the
+    # DOM itself is ready and functional well before that. Confirmed
+    # via debugging: pure HTTP calls (without a browser) to those
+    # same pages always answer quickly - the hang is specific
+    # to `goto`/`reload` waiting for "load".
     page.goto("/login.html", wait_until="domcontentloaded")
     page.fill("#email", login_admin["email"])
     page.fill("#senha", login_admin["senha"])
@@ -220,7 +220,7 @@ def pagina_logada_admin(page, login_admin):
 
 
 def gerar_cpf_unico():
-    """CPF (fictício) único o bastante para não colidir com outros testes na mesma sessão E2E."""
+    """A (fictitious) CPF unique enough not to collide with other tests in the same E2E session."""
     return str(uuid.uuid4().int)[:11]
 
 
@@ -229,16 +229,16 @@ CONDICAO_TESTE_ENCAMINHAMENTO_EXAME = "Condição de teste E2E"
 
 def cadastrar_paciente_via_ui(page, nome, data_nascimento, sexo):
     """
-    Cadastra um paciente novo pela tela pacientes-cadastrar.html e
-    espera o redirecionamento (automático, pós-sucesso) de volta para
-    pacientes.html. Retorna o documento gerado (usado para localizar o
-    paciente depois, via busca).
+    Registers a new patient through the pacientes-cadastrar.html screen and
+    waits for the (automatic, post-success) redirect back to
+    pacientes.html. Returns the generated document (used to locate the
+    patient later, via search).
 
-    NOTA: depois da navegação inicial, toda a navegação é feita por
-    CLIQUES em links (nunca goto()/reload()) - neste ambiente, chamadas
-    explícitas de Page.goto/Page.reload em sequência mostraram-se
-    instáveis (ficam penduradas, mesmo com wait_until="domcontentloaded"),
-    enquanto navegação por clique/redirecionamento via JS nunca falhou.
+    NOTE: after the initial navigation, all navigation is done by
+    CLICKS on links (never goto()/reload()) - in this environment, explicit
+    calls to Page.goto/Page.reload in sequence proved
+    unstable (they hang, even with wait_until="domcontentloaded"),
+    while navigation by click/redirect via JS never failed.
     """
     page.goto("/pacientes-cadastrar.html", wait_until="domcontentloaded")
     documento = gerar_cpf_unico()
@@ -253,12 +253,12 @@ def cadastrar_paciente_via_ui(page, nome, data_nascimento, sexo):
 
 def criar_consulta_de_teste_encaminhamento_exame(page):
     """
-    Cadastra um paciente e uma consulta novos via UI e deixa `page`
-    posicionada em consultas.html, com a nova consulta visível na
-    tabela. Retorna o documento do paciente (usado para reencontrar a
-    linha depois). Compartilhado por test_fluxo_encaminhamento.py e
-    test_fluxo_exame.py (arquivos separados de propósito - ver
-    "Problema conhecido" no README.md).
+    Registers a new patient and a new consultation via the UI and leaves `page`
+    positioned on consultas.html, with the new consultation visible in the
+    table. Returns the patient document (used to find the
+    row again later). Shared by test_fluxo_encaminhamento.py and
+    test_fluxo_exame.py (separate files on purpose - see
+    "Known issue" in README.md).
     """
     documento = cadastrar_paciente_via_ui(page, "Paciente E2E Encaminhamento/Exame", "1978-11-02", "M")
 
@@ -277,7 +277,7 @@ def criar_consulta_de_teste_encaminhamento_exame(page):
 
 
 def voltar_para_consultas_do_paciente(page, documento):
-    """Navega (via cliques) de volta para a tela de consultas do paciente de teste, usando a busca."""
+    """Navigates (via clicks) back to the test patient's consultations screen, using the search."""
     page.get_by_role("link", name="Pacientes").click()
     page.wait_for_url(re.compile(r".*/pacientes\.html$"))
 
@@ -290,9 +290,9 @@ def voltar_para_consultas_do_paciente(page, documento):
 
 def montar_heredograma_fake(consulta_id):
     """
-    Heredograma fake, no MESMO formato que a API real retornaria -
-    usado para mockar tanto POST .../gerar-heredograma quanto GET
-    .../heredograma, evitando qualquer chamada real à API da Anthropic.
+    Fake pedigree, in the SAME format the real API would return -
+    used to mock both POST .../gerar-heredograma and GET
+    .../heredograma, avoiding any real call to the Anthropic API.
     """
     return {
         "consulta_id": int(consulta_id),
@@ -343,12 +343,12 @@ def montar_heredograma_fake(consulta_id):
 
 def gerar_heredograma_de_teste(page):
     """
-    Cadastra paciente+consulta via UI, responde 3 perguntas do roteiro,
-    mocka a geração de heredograma (evita chamada real à API da
-    Anthropic - ver montar_heredograma_fake) e navega até a tela de
-    heredograma, esperando o SVG e os botões de exportação ficarem
-    prontos. Retorna o consulta_id. Compartilhado por
-    test_fluxo_consulta_heredograma.py e test_exportar_heredograma.py.
+    Registers a patient + consultation via the UI, answers 3 questions of the script,
+    mocks the pedigree generation (avoids a real call to the
+    Anthropic API - see montar_heredograma_fake) and navigates to the
+    pedigree screen, waiting for the SVG and the export buttons to become
+    ready. Returns the consulta_id. Shared by
+    test_fluxo_consulta_heredograma.py and test_exportar_heredograma.py.
     """
     from playwright.sync_api import expect
 
@@ -373,8 +373,8 @@ def gerar_heredograma_de_teste(page):
         textarea.fill(f"Resposta de teste E2E para a pergunta {pergunta_id}.")
         botao_salvar = page.locator(f'[data-acao="salvar-nova"][data-pergunta-id="{pergunta_id}"]')
         botao_salvar.click()
-        # Ver nota em test_fluxo_consulta_heredograma.py (histórico) sobre
-        # por que esperamos o botão sumir do DOM, e não uma resposta de rede.
+        # See the note in test_fluxo_consulta_heredograma.py (history) about
+        # why we wait for the button to disappear from the DOM, and not for a network response.
         botao_salvar.wait_for(state="detached")
 
     heredograma_fake = montar_heredograma_fake(consulta_id)
@@ -397,9 +397,9 @@ def gerar_heredograma_de_teste(page):
     svg = page.locator("#heredogramaContainer svg")
     svg.wait_for()
 
-    # Os botões de exportação só habilitam depois que script.js busca os
-    # dados complementares da consulta/paciente (ver prepararExportacao em
-    # exportar-heredograma.js) - espera isso terminar antes de devolver.
+    # The export buttons are only enabled after script.js fetches the
+    # complementary data of the consultation/patient (see prepararExportacao in
+    # exportar-heredograma.js) - waits for that to finish before returning.
     expect(page.locator("#btnExportarPdf")).to_be_enabled()
 
     return consulta_id

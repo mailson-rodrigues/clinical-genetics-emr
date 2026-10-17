@@ -4,9 +4,9 @@ from app.database import Base
 
 class Modulo(Base):
     """
-    Catálogo fixo de módulos do sistema, usado para compor perfis de
-    acesso granulares (ex: "pacientes", "consultas"). Definido pelo
-    sistema, não pelo usuário - sem rota de criação, só GET /modulos/.
+    Fixed catalog of system modules, used to compose granular access
+    profiles (e.g. "pacientes", "consultas"). Defined by the
+    system, not by the user - no create route, only GET /modulos/.
     """
     __tablename__ = "modulos"
 
@@ -17,10 +17,10 @@ class Modulo(Base):
 
 class PerfilAcesso(Base):
     """
-    Perfil de acesso reutilizável (ex: "Recepcionista"), atribuível a
-    profissionais não-administradores para dar controle fino sobre
-    quais módulos eles podem acessar. Administrador sempre tem acesso
-    total, independente de perfil (ver exigir_acesso_modulo em
+    Reusable access profile (e.g. "Recepcionista"), assignable to
+    non-administrator professionals to give fine-grained control over
+    which modules they can access. An administrator always has full
+    access, regardless of profile (see exigir_acesso_modulo in
     app/dependencies.py).
     """
     __tablename__ = "perfis_acesso"
@@ -31,7 +31,7 @@ class PerfilAcesso(Base):
 
 
 class PerfilAcessoModulo(Base):
-    """Vínculo N:N entre um perfil de acesso e os módulos liberados para ele."""
+    """N:N link between an access profile and the modules released for it."""
     __tablename__ = "perfil_acesso_modulos"
 
     id = Column(Integer, primary_key=True, index=True)

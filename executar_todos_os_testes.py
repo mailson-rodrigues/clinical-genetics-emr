@@ -1,10 +1,10 @@
 """
-Roda TODA a suíte de testes do projeto (backend + end-to-end) com um
-único comando, e imprime um resumo geral claro ao final - sem precisar
-rodar `pytest tests/` e `run_e2e_tests.py` separadamente nem interpretar
-duas saídas diferentes.
+Runs the WHOLE test suite of the project (backend + end-to-end) with a
+single command, and prints a clear overall summary at the end - without having to
+run `pytest tests/` and `run_e2e_tests.py` separately nor interpret
+two different outputs.
 
-Uso:
+Usage:
     python executar_todos_os_testes.py
 """
 
@@ -27,10 +27,10 @@ def rodar(comando):
 
 def extrair_ultima_linha_de_resumo_pytest(saida):
     """
-    Procura, de baixo para cima, a última linha da saída do pytest que
-    contém contagens reconhecíveis (ex: "51 passed, 17 warnings in
-    49.60s" ou "2 failed, 63 passed in 60.85s"). Retorna a linha bruta,
-    ou None se não encontrar nenhuma.
+    Searches, from the bottom up, for the last line of the pytest output that
+    contains recognizable counts (e.g. "51 passed, 17 warnings in
+    49.60s" or "2 failed, 63 passed in 60.85s"). Returns the raw line,
+    or None if none is found.
     """
     for linha in reversed(saida.strip().splitlines()):
         if PADRAO_CONTAGEM_PYTEST.search(linha):
@@ -40,9 +40,9 @@ def extrair_ultima_linha_de_resumo_pytest(saida):
 
 def formatar_resumo_backend(resultado):
     """
-    Extrai um resumo curto (ex: "70 passed") da saída do pytest via
-    regex simples - se não conseguir reconhecer o formato, devolve None
-    (quem chama mostra a saída bruta em vez de inventar um número).
+    Extracts a short summary (e.g. "70 passed") from the pytest output via a
+    simple regex - if it cannot recognize the format, returns None
+    (the caller shows the raw output instead of inventing a number).
     """
     linha_resumo = extrair_ultima_linha_de_resumo_pytest(resultado.stdout)
     if linha_resumo is None:
@@ -59,9 +59,9 @@ def formatar_resumo_backend(resultado):
 
 def formatar_resumo_e2e(resultado):
     """
-    Extrai o resumo (ex: "5/5 arquivo(s) passaram") da linha final que
-    run_e2e_tests.py sempre imprime - se o formato mudar e não bater
-    com o regex, devolve None.
+    Extracts the summary (e.g. "5/5 file(s) passed") from the final line that
+    run_e2e_tests.py always prints - if the format changes and does not match
+    the regex, returns None.
     """
     correspondencia = PADRAO_RESUMO_E2E.search(resultado.stdout)
     if not correspondencia:
@@ -93,9 +93,9 @@ def main():
     resultado_e2e = rodar([sys.executable, "run_e2e_tests.py"])
     e2e_ok = resultado_e2e.returncode == 0
 
-    # Saída completa só é exibida para grupos que falharam - mantém o
-    # caso "tudo passou" curto e direto ao ponto, mas nunca esconde
-    # informação de diagnóstico quando algo dá errado.
+    # The full output is only shown for groups that failed - keeps the
+    # "everything passed" case short and to the point, but never hides
+    # diagnostic information when something goes wrong.
     if not backend_ok:
         imprimir_saida_completa("SAÍDA COMPLETA - BACKEND (pytest tests/) - FALHOU", resultado_backend)
     if not e2e_ok:

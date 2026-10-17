@@ -1,5 +1,5 @@
 // =====================================================================
-// CONFIGURAÇÕES DE LAYOUT
+// LAYOUT SETTINGS
 // =====================================================================
 const COL_WIDTH = 160;
 const ROW_HEIGHT = 200;
@@ -90,7 +90,7 @@ function inserirComAdjacenciaParceiros(novaOrdem, codigo, parceirosPorCodigo) {
 }
 
 // =====================================================================
-// PASSO 2: CALCULAR A POSIÇÃO (x, y) DE CADA INDIVÍDUO
+// STEP 2: COMPUTE THE POSITION (x, y) OF EACH INDIVIDUAL
 // =====================================================================
 function calcularPosicoes(individuos, relacionamentos) {
   const porCodigo = {};
@@ -213,9 +213,9 @@ function calcularCodigosComLinhaDescendoDireto(relacionamentos) {
 }
 
 // =====================================================================
-// PASSO 3: DESENHAR UM INDIVÍDUO
-// papel_descricao SEMPRE aparece inline (é curto, por design da IA).
-// observacao (quando existir) vira uma nota de rodapé numerada [n].
+// STEP 3: DRAW AN INDIVIDUAL
+// papel_descricao ALWAYS appears inline (it is short, by AI design).
+// observacao (when present) becomes a numbered footnote [n].
 // =====================================================================
 function desenharIndividuo(svg, individuo, pos, temLinhaDescendoAbaixo, notas) {
   const grupo = criarElementoSVG("g", { class: "individuo" });
@@ -305,7 +305,7 @@ function desenharIndividuo(svg, individuo, pos, temLinhaDescendoAbaixo, notas) {
     grupo.appendChild(rotuloP);
   }
 
-  // Se houver observação clínica adicional, registra como nota numerada
+  // If there is additional clinical observation, register it as a numbered note
   let marcadorNota = null;
   if (individuo.observacao) {
     notas.lista.push({
@@ -316,8 +316,8 @@ function desenharIndividuo(svg, individuo, pos, temLinhaDescendoAbaixo, notas) {
     marcadorNota = `[${notas.lista.length}]`;
   }
 
-  // papel_descricao + marcador de nota (se houver), sempre na mesma linha,
-  // já que o papel é curto por design.
+  // papel_descricao + note marker (if any), always on the same line,
+  // since the role is short by design.
   const textoPapelComNota = [individuo.papel_descricao, marcadorNota]
     .filter(Boolean)
     .join(" ");
@@ -366,7 +366,7 @@ function desenharIndividuo(svg, individuo, pos, temLinhaDescendoAbaixo, notas) {
 }
 
 // =====================================================================
-// PASSO 4: DESENHAR AS LINHAS DE UNIÃO (casais)
+// STEP 4: DRAW THE UNION LINES (couples)
 // =====================================================================
 function desenharUnioes(svg, relacionamentos, posicoes) {
   const unioes = relacionamentos.filter((r) => r.tipo === "uniao");
@@ -399,7 +399,7 @@ function desenharUnioes(svg, relacionamentos, posicoes) {
 }
 
 // =====================================================================
-// PASSO 5: DESENHAR AS LINHAS DE FILIAÇÃO (pais -> filhos)
+// STEP 5: DRAW THE PARENTAGE LINES (parents -> children)
 // =====================================================================
 function desenharFiliacoes(svg, relacionamentos, posicoes) {
   const filiacoes = relacionamentos.filter((r) => r.tipo === "filiacao");
@@ -516,7 +516,7 @@ function montarSVG(dados) {
 }
 
 // =====================================================================
-// Renderiza a caixa de notas de rodapé
+// Renders the footnotes box
 // =====================================================================
 function montarNotas(notas) {
   const container = document.getElementById("notasContainer");
@@ -538,7 +538,7 @@ function montarNotas(notas) {
 }
 
 // =====================================================================
-// LEGENDA (fixa, não depende dos dados)
+// LEGEND (fixed, does not depend on the data)
 // =====================================================================
 function montarLegenda() {
   const itens = [
@@ -560,7 +560,7 @@ function montarLegenda() {
 }
 
 // =====================================================================
-// LIGAÇÃO COM A INTERFACE (botão, mensagens de erro)
+// WIRING TO THE INTERFACE (button, error messages)
 // =====================================================================
 async function carregarEDesenhar() {
   const consultaId = document.getElementById("consultaId").value;
@@ -571,9 +571,9 @@ async function carregarEDesenhar() {
   container.innerHTML = "";
   const notasContainer = document.getElementById("notasContainer");
   if (notasContainer) notasContainer.innerHTML = "";
-  // Desabilita a exportação enquanto carrega/troca de consulta - só faz
-  // sentido exportar depois de um heredograma carregado com sucesso
-  // (ver exportar-heredograma.js).
+  // Disables export while loading/switching consultation - it only makes
+  // sense to export after a pedigree has loaded successfully
+  // (see exportar-heredograma.js).
   desabilitarBotoesExportacao();
 
   if (!consultaId) {

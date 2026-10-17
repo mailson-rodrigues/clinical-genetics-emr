@@ -3,8 +3,8 @@ function obterParametroURL(nome) {
   return parametros.get(nome);
 }
 
-// Evita o efeito de "voltar um dia" que `new Date("YYYY-MM-DD")` causa em
-// fusos horários atrás de UTC - formata direto a partir da string ISO.
+// Avoids the "one day back" effect that `new Date("YYYY-MM-DD")` causes in
+// time zones behind UTC - formats directly from the ISO string.
 function formatarData(dataISO) {
   if (!dataISO) return "-";
   const [ano, mes, dia] = dataISO.split("-");
@@ -22,7 +22,7 @@ const LABEL_STATUS = {
 };
 
 // =====================================================================
-// Carrega o título da consulta
+// Loads the consultation title
 // =====================================================================
 async function carregarTituloConsulta() {
   const resposta = await fetch(`/consultas/${consultaId}`);
@@ -36,7 +36,7 @@ async function carregarTituloConsulta() {
 }
 
 // =====================================================================
-// Carrega os indivíduos do heredograma para o <select>
+// Loads the pedigree individuals for the <select>
 // =====================================================================
 async function carregarIndividuos() {
   const select = document.getElementById("individuo");
@@ -128,9 +128,9 @@ async function carregarExames() {
 }
 
 // =====================================================================
-// Painel de anexos de um exame específico - expande/recolhe uma linha
-// logo abaixo da linha do exame na tabela, com o formulário de upload
-// e a lista de documentos já anexados (ver anexos.js).
+// Attachments panel for a specific exam - expands/collapses a row
+// right below the exam row in the table, with the upload form
+// and the list of documents already attached (see anexos.js).
 // =====================================================================
 function alternarPainelAnexos(exameId) {
   const linhaExistente = document.getElementById(`linha-anexos-${exameId}`);
@@ -171,7 +171,7 @@ function alternarPainelAnexos(exameId) {
 }
 
 // =====================================================================
-// Registra um novo exame
+// Registers a new exam
 // =====================================================================
 document.getElementById("formExame").addEventListener("submit", async (evento) => {
   evento.preventDefault();
@@ -259,7 +259,7 @@ async function removerExame(exameId) {
 }
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (!consultaId) {
   document.getElementById("tituloConsulta").textContent = "Nenhuma consulta selecionada.";

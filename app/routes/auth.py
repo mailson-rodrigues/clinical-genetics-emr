@@ -16,11 +16,11 @@ router = APIRouter(prefix="/auth", tags=["Autenticacao"])
 @limiter.limit("10/minute")
 def login(request: Request, dados: LoginRequest, db: Session = Depends(get_db)):
     """
-    Autentica um profissional por e-mail e senha, retornando um token de
-    acesso.
+    Authenticates a professional by e-mail and password, returning an
+    access token.
 
-    Limitada a 10 tentativas/minuto por IP (@limiter.limit) para dificultar
-    força bruta de senha. Excedido o limite, responde 429 Too Many Requests.
+    Limited to 10 attempts/minute per IP (@limiter.limit) to make password
+    brute force harder. Once the limit is exceeded, responds 429 Too Many Requests.
     """
     profissional = db.query(Profissional).filter(Profissional.email == dados.email).first()
 
@@ -42,7 +42,7 @@ def login(request: Request, dados: LoginRequest, db: Session = Depends(get_db)):
 
 @router.get("/me", response_model=ProfissionalResponse)
 def obter_sessao_atual(profissional_atual: Profissional = Depends(obter_profissional_atual)):
-    """Retorna os dados do profissional dono do token atual - útil para o frontend confirmar a sessão."""
+    """Returns the data of the professional who owns the current token - useful for the frontend to confirm the session."""
     return profissional_atual
 
 
@@ -53,13 +53,13 @@ def redefinir_senha(
     _administrador: Profissional = Depends(exigir_administrador),
 ):
     """
-    Redefine a senha de um profissional a partir do e-mail. Requer login
-    como ADMINISTRADOR.
+    Resets a professional's password from their e-mail. Requires login
+    as ADMINISTRATOR.
 
-    LIMITAÇÃO CONHECIDA: esta é uma redefinição ADMINISTRATIVA - não há
-    fluxo de autoatendimento (link por e-mail, código de verificação,
-    etc.). O profissional que esqueceu a senha precisa pedir para um
-    administrador redefini-la por aqui.
+    KNOWN LIMITATION: this is an ADMINISTRATIVE reset - there is no
+    self-service flow (e-mail link, verification code,
+    etc.). A professional who forgot their password must ask an
+    administrator to reset it here.
     """
     profissional = db.query(Profissional).filter(Profissional.email == dados.email).first()
     if not profissional:

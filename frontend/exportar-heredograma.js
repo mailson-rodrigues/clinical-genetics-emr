@@ -1,22 +1,22 @@
 // =====================================================================
-// Exportação do heredograma exibido (PDF e PNG), gerada inteiramente
-// no navegador - reaproveita o mesmo <svg> que script.js já desenha,
-// sem nenhuma rota nova no backend.
+// Export of the displayed pedigree (PDF and PNG), generated entirely
+// in the browser - reuses the same <svg> that script.js already draws,
+// without any new backend route.
 //
-// PDF: usa jsPDF + svg2pdf.js para inserir o SVG como conteúdo VETORIAL
-// de verdade (linhas e texto nítidos em qualquer zoom, texto
-// selecionável) - em vez de rasterizar o SVG como imagem.
+// PDF: uses jsPDF + svg2pdf.js to insert the SVG as real VECTOR
+// content (sharp lines and text at any zoom, selectable
+// text) - instead of rasterizing the SVG as an image.
 //
-// PNG: como o formato é sempre raster, aqui SIM rasterizamos o SVG -
-// via XMLSerializer + Image + canvas.drawImage - e exportamos com
-// canvas.toDataURL()/toBlob(). Não há alternativa vetorial para PNG.
+// PNG: since the format is always raster, here we DO rasterize the SVG -
+// via XMLSerializer + Image + canvas.drawImage - and export with
+// canvas.toDataURL()/toBlob(). There is no vector alternative for PNG.
 //
-// A legenda e as notas de rodapé são redesenhadas "na mão" (formas
-// jsPDF / canvas 2D) em vez de reaproveitar o HTML de
-// #legendaContainer/#notasContainer, porque as APIs de desenho do
-// jsPDF e do Canvas2D são bem diferentes da manipulação de DOM/SVG -
-// isso espelha o conteúdo fixo de montarLegenda() (5 itens) em
-// script.js; se a legenda mudar lá, precisa mudar aqui também.
+// The legend and the footnotes are redrawn "by hand" (jsPDF /
+// canvas 2D shapes) instead of reusing the HTML of
+// #legendaContainer/#notasContainer, because the drawing APIs of
+// jsPDF and Canvas2D are quite different from DOM/SVG manipulation -
+// this mirrors the fixed content of montarLegenda() (5 items) in
+// script.js; if the legend changes there, it must change here too.
 // =====================================================================
 
 let dadosExportacaoAtual = null;
@@ -50,9 +50,9 @@ function nomeArquivoExportacao(extensao) {
 }
 
 // =====================================================================
-// Chamada por script.js logo depois de desenhar o heredograma com
-// sucesso - busca os dados complementares (consulta, paciente) e só
-// então habilita os botões de exportação.
+// Called by script.js right after drawing the pedigree
+// successfully - fetches the complementary data (consultation, patient) and only
+// then enables the export buttons.
 // =====================================================================
 async function prepararExportacao(consultaId, svgElement, notas, elementoMensagem) {
   try {
@@ -97,23 +97,23 @@ const ITENS_LEGENDA = [
 ];
 
 // =====================================================================
-// Paginação do PDF: título, desenho do heredograma, legenda e notas são
-// desenhados em sequência num Y que só cresce - sem checar o espaço
-// restante da página, qualquer bloco que "sobrasse" (tipicamente
-// legenda/notas, em heredogramas com muitas notas) ficava posicionado
-// abaixo do fim da página e não aparecia no PDF. `garantirEspaco` checa
-// se um bloco de altura conhecida cabe no que resta da página atual
-// (respeitando uma margem inferior de segurança) e, se não couber,
-// chama doc.addPage() e devolve o Y do topo da nova página - cada bloco
-// (legenda inteira; cada nota individualmente, já que pode haver
-// muitas) passa por essa checagem antes de ser desenhado.
+// PDF pagination: title, pedigree drawing, legend and notes are
+// drawn in sequence at a Y that only grows - without checking the remaining
+// space on the page, any block that "overflowed" (typically
+// legend/notes, in pedigrees with many notes) was positioned
+// below the end of the page and did not appear in the PDF. `garantirEspaco` checks
+// whether a block of known height fits in what remains of the current page
+// (respecting a safety bottom margin) and, if it does not fit,
+// calls doc.addPage() and returns the Y of the top of the new page - each block
+// (the whole legend; each note individually, since there may be
+// many) goes through this check before being drawn.
 //
-// O desenho do heredograma em si é a única exceção de propósito: ele
-// só é escalado para caber na LARGURA da página (nunca dividido entre
-// páginas) - um heredograma grande o bastante para ultrapassar a altura
-// de uma página sozinho continua avançando por cima da margem, mas
-// isso é aceitável (não é o bug relatado, que era especificamente
-// sobre legenda/notas desaparecerem).
+// The pedigree drawing itself is the one deliberate exception: it
+// is only scaled to fit the page WIDTH (never split across
+// pages) - a pedigree large enough to exceed the height
+// of a page on its own keeps advancing over the margin, but
+// that is acceptable (it is not the reported bug, which was specifically
+// about the legend/notes disappearing).
 // =====================================================================
 const PONTOS_POR_MM = 2.834645669291339;
 const MARGEM_INFERIOR_SEGURANCA = 20 * PONTOS_POR_MM; // ~20mm, conforme pedido
@@ -135,8 +135,8 @@ const ALTURA_TOTAL_LEGENDA =
   ALTURA_TITULO_BLOCO + ITENS_LEGENDA.length * ALTURA_ITEM_LEGENDA + RESPIRO_FINAL_BLOCO;
 
 function desenharLegendaPDF(doc, x, yInicial) {
-  // A legenda tem tamanho fixo (5 itens) - cabe checar o espaço UMA vez
-  // pro bloco inteiro, em vez de item por item.
+  // The legend has a fixed size (5 items) - it is enough to check the space ONCE
+  // for the whole block, instead of item by item.
   let y = garantirEspaco(doc, yInicial, ALTURA_TOTAL_LEGENDA);
 
   doc.setFont(undefined, "bold");
@@ -154,7 +154,7 @@ function desenharLegendaPDF(doc, x, yInicial) {
   doc.text(ITENS_LEGENDA[0], x + 24, y);
   y += ALTURA_ITEM_LEGENDA;
 
-  // Sexo feminino: círculo contornado
+  // Female sex: outlined circle
   doc.circle(cx, y - 3, 6);
   doc.text(ITENS_LEGENDA[1], x + 24, y);
   y += ALTURA_ITEM_LEGENDA;
@@ -165,14 +165,14 @@ function desenharLegendaPDF(doc, x, yInicial) {
   doc.text(ITENS_LEGENDA[2], x + 24, y);
   y += ALTURA_ITEM_LEGENDA;
 
-  // Portador: círculo contornado com ponto central preenchido
+  // Carrier: outlined circle with a filled central dot
   doc.circle(cx, y - 3, 6);
   doc.setFillColor(51, 51, 51);
   doc.circle(cx, y - 3, 2, "F");
   doc.text(ITENS_LEGENDA[3], x + 24, y);
   y += ALTURA_ITEM_LEGENDA;
 
-  // Falecido: quadrado contornado com linha diagonal
+  // Deceased: outlined square with a diagonal line
   doc.rect(cx - 6, y - 9, 12, 12);
   doc.line(cx - 6, y + 3, cx + 6, y - 9);
   doc.text(ITENS_LEGENDA[4], x + 24, y);
@@ -185,11 +185,11 @@ const ALTURA_LINHA_NOTA = 13;
 const ESPACAMENTO_ENTRE_NOTAS = 4;
 
 // =====================================================================
-// Hipóteses diagnósticas (ver hipoteses.html/.js) - se a consulta tiver
-// hipóteses geradas, o PDF ganha uma seção extra com o MESMO aviso
-// ético exibido na tela (mantenha os dois textos idênticos se um dia
-// precisar editar) antes da lista. Se não houver hipóteses, a seção
-// simplesmente não aparece no PDF (nada de bloco vazio).
+// Diagnostic hypotheses (see hipoteses.html/.js) - if the consultation has
+// generated hypotheses, the PDF gets an extra section with the SAME ethical
+// notice shown on screen (keep both texts identical if you ever
+// need to edit them) before the list. If there are no hypotheses, the section
+// simply does not appear in the PDF (no empty block).
 // =====================================================================
 const TEXTO_AVISO_ETICO_HIPOTESES = [
   "Esta é uma sugestão gerada por inteligência artificial, com base no " +
@@ -238,9 +238,9 @@ function desenharHipotesesPDF(doc, x, yInicial, hipoteses) {
 
   y = garantirEspaco(doc, y, alturaCaixaAviso);
 
-  // Caixa com fundo e borda em destaque - mesma ideia visual do
-  // ".aviso-etico" em style.css (não dá pra reaproveitar CSS aqui, o
-  // jsPDF desenha em pontos/RGB).
+  // Box with a highlighted background and border - same visual idea as
+  // ".aviso-etico" in style.css (CSS cannot be reused here, jsPDF
+  // draws in points/RGB).
   doc.setFillColor(244, 229, 229); // ~ var(--cor-perigo-claro)
   doc.setDrawColor(155, 59, 59); // ~ var(--cor-perigo)
   doc.setLineWidth(1);
@@ -253,8 +253,8 @@ function desenharHipotesesPDF(doc, x, yInicial, hipoteses) {
 
   y += alturaCaixaAviso + RESPIRO_FINAL_BLOCO;
 
-  // Lista das hipóteses (condição, CID sugerido e justificativa) -
-  // cada uma checa seu próprio espaço, como as notas.
+  // List of hypotheses (condition, suggested CID and justification) -
+  // each one checks its own space, like the notes.
   doc.setFontSize(10);
   const larguraTextoHipotese = larguraCaixa;
   for (const hipotese of hipoteses) {
@@ -291,9 +291,9 @@ function desenharNotasPDF(doc, x, yInicial) {
   doc.setFontSize(10);
   const larguraMaxima = doc.internal.pageSize.getWidth() - x * 2;
 
-  // Notas são desenhadas uma a uma, cada uma checando seu próprio
-  // espaço (podem ser muitas, e cada uma tem altura diferente
-  // dependendo de quantas linhas o texto ocupa quebrado).
+  // Notes are drawn one by one, each checking its own
+  // space (there may be many, and each has a different height
+  // depending on how many lines the wrapped text takes).
   for (const nota of dadosExportacaoAtual.notas) {
     const texto = `[${nota.numero}] ${nota.codigo} — ${nota.texto}`;
     const linhas = doc.splitTextToSize(texto, larguraMaxima);
@@ -343,21 +343,21 @@ async function exportarPDF() {
     const larguraSvg = Number(svgElement.getAttribute("width"));
     const alturaSvg = Number(svgElement.getAttribute("height"));
 
-    // CORREÇÃO DE REGRESSÃO (a versão anterior desta correção ainda
-    // deixava o desenho ser cortado pela borda física da página em
-    // heredogramas com várias gerações - confirmado visualmente
-    // renderizando o PDF gerado). doc.svg() desenha o SVG inteiro numa
-    // única página; se ele não couber no espaço disponível, o conteúdo
-    // que sobra é CORTADO pela borda da página (MediaBox do PDF), não
-    // continua sozinho na próxima. A garantia exigida é que TODOS os
-    // indivíduos sempre apareçam completos, então:
-    //   1. Escala pela LARGURA da página normalmente.
-    //   2. Se, com essa escala, a altura não couber no que resta da
-    //      página atual, começa uma página nova (que tem mais espaço
-    //      vertical disponível, por não ter o bloco de título).
-    //   3. Se mesmo assim não couber numa página inteira do zero,
-    //      SÓ ENTÃO reduz a escala também pela altura - o desenho fica
-    //      menor/mais denso nesse caso extremo, mas nunca cortado.
+    // REGRESSION FIX (the previous version of this fix still
+    // let the drawing be cut off by the physical edge of the page in
+    // pedigrees with several generations - confirmed visually by
+    // rendering the generated PDF). doc.svg() draws the whole SVG on a
+    // single page; if it does not fit in the available space, the content
+    // that overflows is CUT by the page edge (PDF MediaBox), it does not
+    // continue on its own on the next one. The required guarantee is that ALL
+    // individuals always appear complete, so:
+    //   1. Scale by the page WIDTH as usual.
+    //   2. If, with that scale, the height does not fit in what remains of the
+    //      current page, start a new page (which has more vertical
+    //      space available, since it has no title block).
+    //   3. If it still does not fit on a whole page from scratch,
+    //      ONLY THEN also reduce the scale by height - the drawing gets
+    //      smaller/denser in that extreme case, but never cut off.
     const larguraDisponivel = doc.internal.pageSize.getWidth() - margem * 2;
     const escalaLargura = Math.min(1, larguraDisponivel / larguraSvg);
 
@@ -397,7 +397,7 @@ async function exportarPDF() {
 }
 
 // =====================================================================
-// PNG (raster - SVG desenhado num <canvas> e exportado com toBlob)
+// PNG (raster - SVG drawn on a <canvas> and exported with toBlob)
 // =====================================================================
 function quebrarTextoCanvas(contexto, texto, larguraMaxima) {
   const palavras = texto.split(" ");

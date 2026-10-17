@@ -1,7 +1,7 @@
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-# Instância única de Limiter, compartilhada entre app/main.py (registro do
-# handler de erro 429) e as rotas que aplicam @limiter.limit(...) - o
-# slowapi exige que seja o mesmo objeto nos dois lugares.
+# Single Limiter instance, shared between app/main.py (registration of the
+# 429 error handler) and the routes that apply @limiter.limit(...) - the
+# slowapi requires it to be the same object in both places.
 limiter = Limiter(key_func=get_remote_address)

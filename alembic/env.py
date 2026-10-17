@@ -8,13 +8,13 @@ from sqlalchemy import pool
 from alembic import context
 from dotenv import load_dotenv
 
-# Garante que o Alembic consegue importar os módulos do projeto (pasta app/)
+# Ensures Alembic can import the project modules (app/ folder)
 sys.path.append(os.getcwd())
 
 load_dotenv()
 
-# Importa a Base e TODOS os modelos - o Alembic usa isso para saber
-# qual é o "estado desejado" do banco e comparar com o estado atual.
+# Imports Base and ALL the models - Alembic uses this to know
+# the "desired state" of the database and compare it with the current state.
 from app.database import Base
 from app.models.paciente import Paciente
 from app.models.anamnese import Pergunta, Consulta, Resposta
@@ -33,8 +33,8 @@ from app.models.hipotese import HipoteseDiagnostica, FonteHipotese
 
 config = context.config
 
-# Usa a mesma URL de banco que o resto da aplicação usa (via .env, ou o
-# padrão SQLite local se não houver variável definida).
+# Uses the same database URL as the rest of the application (via .env, or the
+# local SQLite default if no variable is set).
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./heredograma.db")
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 

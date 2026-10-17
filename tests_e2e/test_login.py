@@ -3,12 +3,12 @@ import re
 
 def test_login_com_credenciais_validas_redireciona_para_index(page, login_admin):
     """
-    Teste smoke: valida o pipeline E2E de ponta a ponta (servidor real +
-    banco real + navegador real) através do fluxo de login mais simples
-    do sistema.
+    Smoke test: validates the end-to-end E2E pipeline (real server +
+    real database + real browser) through the simplest login
+    flow of the system.
     """
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/login.html", wait_until="domcontentloaded")
 
     page.fill("#email", login_admin["email"])
@@ -20,8 +20,8 @@ def test_login_com_credenciais_validas_redireciona_para_index(page, login_admin)
 
 
 def test_login_com_senha_incorreta_mostra_erro(page, login_admin):
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/login.html", wait_until="domcontentloaded")
 
     page.fill("#email", login_admin["email"])

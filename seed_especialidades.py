@@ -1,8 +1,8 @@
 """
-Popula o catálogo inicial de especialidades profissionais. Pressupõe
-que as tabelas já existem (via Alembic).
+Populates the initial catalog of professional specialties. Assumes
+the tables already exist (via Alembic).
 
-Como rodar:
+How to run:
     python seed_especialidades.py
 """
 

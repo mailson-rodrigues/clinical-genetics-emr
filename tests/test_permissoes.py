@@ -1,7 +1,7 @@
 """
-Testes focados especificamente na diferença de comportamento entre
-nivel_acesso="profissional" e "administrador" nas rotas restritas a
-administrador (dependência `exigir_administrador` em app/dependencies.py).
+Tests focused specifically on the difference in behavior between
+nivel_acesso="profissional" and "administrador" on the routes restricted to
+administrators (the `exigir_administrador` dependency in app/dependencies.py).
 """
 
 

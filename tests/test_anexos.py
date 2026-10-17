@@ -70,7 +70,7 @@ def test_upload_arquivo_grande_demais_e_rejeitado(client, paciente_exemplo, prof
 
     assert resposta.status_code == 400
     assert "grande" in resposta.json()["detail"].lower()
-    # Nada deve ter sido gravado (nem registro, nem arquivo em disco)
+    # Nothing should have been written (neither a record nor a file on disk)
     assert db_session.query(Anexo).count() == 0
 
 

@@ -10,16 +10,16 @@ from app.models.perfil_acesso import Modulo, PerfilAcessoModulo
 from app.models.profissional import Profissional
 from app.services.seguranca import decodificar_token
 
-# HTTPBearer é reconhecido pelo Swagger como um "esquema de segurança" de
-# verdade, o que faz aparecer o botão global "Authorize" (cadeado) no
-# topo da página /docs, funcionando para todas as rotas protegidas de
-# uma vez - diferente do Header manual que usávamos antes.
+# HTTPBearer is recognized by Swagger as a real "security scheme",
+# which makes the global "Authorize" button (padlock) appear at the
+# top of the /docs page, working for all protected routes at
+# once - unlike the manual Header we used before.
 esquema_bearer = HTTPBearer()
 
-# auto_error=False: não lança 401 quando não há header Authorization -
-# usado em rotas públicas que só precisam saber QUEM é o profissional
-# (se houver) para decidir alguma coisa condicionalmente (ex: liberar um
-# parâmetro extra só para administradores), sem exigir login de todo mundo.
+# auto_error=False: does not raise 401 when there is no Authorization header -
+# used on public routes that only need to know WHO the professional is
+# (if any) to decide something conditionally (e.g. unlock an
+# extra parameter only for administrators), without requiring everyone to log in.
 esquema_bearer_opcional = HTTPBearer(auto_error=False)
 
 
@@ -28,8 +28,8 @@ def obter_profissional_atual(
     db: Session = Depends(get_db),
 ) -> Profissional:
     """
-    Extrai e valida o token JWT (via esquema Bearer), retornando o
-    Profissional correspondente. Usada para proteger rotas que exigem login.
+    Extracts and validates the JWT token (via the Bearer scheme), returning the
+    matching Profissional. Used to protect routes that require login.
     """
     token = credenciais.credentials
 
@@ -54,10 +54,10 @@ def obter_profissional_opcional(
     db: Session = Depends(get_db),
 ) -> Optional[Profissional]:
     """
-    Como `obter_profissional_atual`, mas retorna None em vez de lançar 401
-    quando não há token - para rotas públicas que precisam identificar o
-    profissional apenas quando ele estiver logado. Um token PRESENTE mas
-    inválido/expirado ainda lança 401 (evita mascarar um token corrompido).
+    Like `obter_profissional_atual`, but returns None instead of raising 401
+    when there is no token - for public routes that need to identify the
+    professional only when they are logged in. A token that is PRESENT but
+    invalid/expired still raises 401 (avoids masking a corrupted token).
     """
     if credenciais is None:
         return None
@@ -82,7 +82,7 @@ def exigir_administrador(
     profissional_atual: Profissional = Depends(obter_profissional_atual),
 ) -> Profissional:
     """
-    Dependência adicional: exige que o profissional logado tenha
+    Additional dependency: requires the logged-in professional to have
     nivel_acesso == 'administrador'.
     """
     if profissional_atual.nivel_acesso != "administrador":
@@ -95,14 +95,14 @@ def exigir_administrador(
 
 def exigir_acesso_modulo(codigo_modulo: str):
     """
-    Fábrica de dependência (dependência com parâmetro): retorna uma
-    dependência que exige login E acesso ao módulo informado via
-    Perfil de Acesso - a menos que o profissional seja administrador,
-    que sempre tem acesso total independente de perfil.
+    Dependency factory (a dependency with a parameter): returns a
+    dependency that requires login AND access to the given module via
+    Access Profile - unless the professional is an administrator,
+    who always has full access regardless of profile.
 
-    Uso: `Depends(exigir_acesso_modulo("consultas"))` no lugar de
-    `Depends(obter_profissional_atual)` nas rotas que devem respeitar
-    o perfil de acesso granular.
+    Usage: `Depends(exigir_acesso_modulo("consultas"))` in place of
+    `Depends(obter_profissional_atual)` on routes that must respect
+    the granular access profile.
     """
     def verificador(
         profissional_atual: Profissional = Depends(obter_profissional_atual),

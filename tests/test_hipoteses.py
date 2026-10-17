@@ -61,9 +61,9 @@ def test_gerar_hipoteses_define_ordem_pela_posicao_da_resposta_da_ia(
     client, consulta_exemplo, pergunta_exemplo, profissional_token, mocker
 ):
     """
-    "ordem" não é um campo pedido à IA - é derivado da posição em que
-    cada hipótese vem na lista (a IA já é instruída a ordenar da mais
-    para a menos provável, ver PROMPT_SISTEMA_HIPOTESES).
+    "ordem" is not a field requested from the AI - it is derived from the position in which
+    each hypothesis appears in the list (the AI is already instructed to sort from the most
+    to the least likely, see PROMPT_SISTEMA_HIPOTESES).
     """
     hipoteses = HipotesesExtraidas(hipoteses=[
         HipoteseDiagnosticaExtraida(condicao="Mais provável", justificativa="Justificativa A.", fontes=[]),
@@ -84,7 +84,7 @@ def test_gerar_hipoteses_define_ordem_pela_posicao_da_resposta_da_ia(
     assert corpo[1]["condicao"] == "Menos provável"
     assert corpo[1]["ordem"] == 2
 
-    # GET também devolve na mesma ordem (ORDER BY ordem no backend)
+    # GET also returns in the same order (ORDER BY ordem in the backend)
     resposta_get = client.get(f"/consultas/{consulta_exemplo['id']}/hipoteses")
     corpo_get = resposta_get.json()
     assert [h["condicao"] for h in corpo_get] == ["Mais provável", "Menos provável"]
@@ -163,7 +163,7 @@ def test_buscar_mais_fontes_anexa_sem_substituir(
     assert resposta.status_code == 200
     mock_mais_fontes.assert_called_once()
     corpo = resposta.json()
-    # 2 fontes originais + 1 nova = 3, sem substituir as existentes
+    # 2 original sources + 1 new = 3, without replacing the existing ones
     assert len(corpo["fontes"]) == 3
     urls = {fonte["url"] for fonte in corpo["fontes"]}
     assert "https://pubmed.ncbi.nlm.nih.gov/12345" in urls
@@ -190,7 +190,7 @@ def test_gerar_hipoteses_sem_login(client, consulta_exemplo):
 def test_gerar_hipoteses_acima_do_limite_retorna_429(
     client, consulta_exemplo, pergunta_exemplo, profissional_token, mocker
 ):
-    """A rota é limitada a 20 requisições/minuto por IP (ver app/routes/hipotese.py)."""
+    """The route is limited to 20 requests/minute per IP (see app/routes/hipotese.py)."""
     _registrar_resposta(client, consulta_exemplo["id"], pergunta_exemplo.id, profissional_token)
     mocker.patch("app.routes.hipotese.gerar_hipoteses", return_value=_hipoteses_exemplo())
 

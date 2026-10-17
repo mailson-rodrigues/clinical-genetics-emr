@@ -5,9 +5,9 @@ from app.database import Base
 
 class Exame(Base):
     """
-    Representa a solicitação e o resultado de um exame no contexto de uma
-    consulta, podendo ser vinculado a um indivíduo específico do
-    heredograma (ex: familiar investigado) ou ao paciente/consulta em geral.
+    Represents the request and result of an exam in the context of a
+    consultation, which may be linked to a specific individual of the
+    pedigree (e.g. a relative under investigation) or to the patient/consultation in general.
     """
     __tablename__ = "exames"
 

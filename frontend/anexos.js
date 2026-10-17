@@ -1,8 +1,8 @@
 // =====================================================================
-// Anexos (documentos, laudos em PDF, imagens) - compartilhado por
-// paciente-editar.js (um paciente) e exames.js (um exame por vez,
-// painel expansível na tabela). Inclua ANTES do script específico da
-// página, depois de auth.js.
+// Attachments (documents, PDF reports, images) - shared by
+// paciente-editar.js (one patient) and exames.js (one exam at a time,
+// expandable panel in the table). Include BEFORE the page-specific
+// script, after auth.js.
 // =====================================================================
 
 function formatarTamanhoArquivo(bytes) {
@@ -17,11 +17,11 @@ function formatarDataAnexo(iso) {
 }
 
 // =====================================================================
-// Baixa o arquivo via fetchAutenticado (o link não pode ser um <a
-// href> simples - a rota de download exige login, e um clique de link
-// comum não envia o header Authorization) e dispara o download no
-// navegador via um link temporário, mesmo padrão já usado para
-// PDF/PNG em exportar-heredograma.js.
+// Downloads the file via fetchAutenticado (the link cannot be a plain <a
+// href> - the download route requires login, and an ordinary link click
+// does not send the Authorization header) and triggers the download in the
+// browser through a temporary link, the same pattern already used for
+// PDF/PNG in exportar-heredograma.js.
 // =====================================================================
 async function baixarAnexo(anexoId, nomeSugerido) {
   try {
@@ -80,9 +80,9 @@ function renderizarListaAnexos(containerEl, anexos, aoRemover) {
 }
 
 // =====================================================================
-// Liga o formulário de upload + a lista de um contexto (paciente ou
-// exame) a uma rota base (`${baseUrl}/anexos`) - carrega a lista já na
-// inicialização.
+// Wires the upload form + the list of a context (patient or
+// exam) to a base route (`${baseUrl}/anexos`) - loads the list right at
+// initialization.
 // =====================================================================
 function inicializarAnexos({ baseUrl, formId, inputId, mensagemId, listaId }) {
   const form = document.getElementById(formId);
@@ -128,9 +128,9 @@ function inicializarAnexos({ baseUrl, formId, inputId, mensagemId, listaId }) {
     dadosFormulario.append("arquivo", arquivo);
 
     try {
-      // Sem header Content-Type manual - o navegador define
-      // multipart/form-data com o boundary correto sozinho quando o
-      // corpo é um FormData.
+      // No manual Content-Type header - the browser sets
+      // multipart/form-data with the correct boundary on its own when the
+      // body is a FormData.
       const resposta = await fetchAutenticado(`${baseUrl}/anexos`, {
         method: "POST",
         body: dadosFormulario,

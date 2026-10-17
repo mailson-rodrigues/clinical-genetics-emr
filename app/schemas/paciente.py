@@ -4,7 +4,7 @@ from typing import Optional
 
 
 class PacienteBase(BaseModel):
-    # Dados pessoais
+    # Personal data
     nome: str
     nome_social: Optional[str] = None
     data_nascimento: date
@@ -19,7 +19,7 @@ class PacienteBase(BaseModel):
     whatsapp: Optional[str] = None
     email: Optional[EmailStr] = None
 
-    # Endereço
+    # Address
     cep: Optional[str] = None
     endereco: Optional[str] = None
     numero: Optional[str] = None
@@ -28,12 +28,12 @@ class PacienteBase(BaseModel):
     cidade: Optional[str] = None
     uf: Optional[str] = None
 
-    # Recém-nascido / responsável
+    # Newborn / guardian
     recem_nascido: bool = False
     nome_responsavel: Optional[str] = None
     parentesco_responsavel: Optional[str] = None
 
-    # Preferências
+    # Preferences
     aceita_mensagens: bool = True
 
     # LGPD

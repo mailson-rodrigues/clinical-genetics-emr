@@ -1,16 +1,16 @@
 """
-Roda a suíte de testes E2E (tests_e2e/) com um único comando, executando
-CADA arquivo de teste como um subprocesso pytest separado.
+Runs the E2E test suite (tests_e2e/) with a single command, executing
+EACH test file as a separate pytest subprocess.
 
-Por quê: rodar todos os arquivos numa única sessão do pytest
-(`pytest tests_e2e/ -v`) é sabidamente instável hoje - ver a seção
-"Problema conhecido" em tests_e2e/README.md. Isolando cada arquivo em
-seu próprio processo, cada um sobe/derruba seu próprio servidor E2E do
-zero (fixture `servidor_e2e` em tests_e2e/conftest.py), o que evita o
-problema por completo - cada arquivo, rodado sozinho, passa de forma
-confiável.
+Why: running all the files in a single pytest session
+(`pytest tests_e2e/ -v`) is currently known to be unstable - see the section
+"Known issue" in tests_e2e/README.md. By isolating each file in
+its own process, each one starts/stops its own E2E server from
+scratch (`servidor_e2e` fixture in tests_e2e/conftest.py), which avoids the
+problem entirely - each file, run on its own, passes
+reliably.
 
-Uso:
+Usage:
     python run_e2e_tests.py
 """
 
@@ -23,7 +23,7 @@ DIRETORIO_E2E = RAIZ_PROJETO / "tests_e2e"
 
 
 def listar_arquivos_de_teste():
-    """Todos os test_*.py dentro de tests_e2e/ (conftest.py não é um arquivo de teste)."""
+    """All the test_*.py files inside tests_e2e/ (conftest.py is not a test file)."""
     return sorted(DIRETORIO_E2E.glob("test_*.py"))
 
 

@@ -4,8 +4,8 @@ from app.database import Base
 
 class Individuo(Base):
     """
-    Representa um indivíduo dentro do heredograma de uma consulta.
-    O 'codigo' segue a notação do padrão PSTF/NSGC, ex: 'I.1', 'II.2'.
+    Represents an individual within the pedigree of a consultation.
+    The 'codigo' follows the PSTF/NSGC standard notation, e.g. 'I.1', 'II.2'.
     """
     __tablename__ = "individuos"
 
@@ -15,8 +15,8 @@ class Individuo(Base):
     codigo = Column(String, nullable=False)
     geracao = Column(Integer, nullable=False)
     posicao = Column(Integer, nullable=False)
-    papel_descricao = Column(String, nullable=True)  # papel curto, ex: "Pai", "Avô paterno"
-    observacao = Column(Text, nullable=True)  # informação clínica adicional, ex: "PSA alterado, em investigação"
+    papel_descricao = Column(String, nullable=True)  # short role, e.g. "Pai", "Avô paterno"
+    observacao = Column(Text, nullable=True)  # additional clinical information, e.g. "PSA alterado, em investigação"
 
     sexo = Column(String, nullable=False)
     afetado = Column(Boolean, default=False)

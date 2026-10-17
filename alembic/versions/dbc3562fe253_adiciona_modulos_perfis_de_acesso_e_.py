@@ -1,4 +1,4 @@
-"""adiciona modulos, perfis de acesso e vinculo com profissional
+"""adds modulos, access profiles and link to profissional
 
 Revision ID: dbc3562fe253
 Revises: 24d356e03b5c
@@ -46,10 +46,10 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_perfil_acesso_modulos_id'), 'perfil_acesso_modulos', ['id'], unique=False)
-    # SQLite não suporta ALTER TABLE ADD CONSTRAINT diretamente - precisa
-    # do modo batch (recria a tabela por baixo dos panos, copiando os
-    # dados). op.add_column + op.create_foreign_key soltos (como o
-    # autogenerate gerou originalmente) falham com
+    # SQLite does not support ALTER TABLE ADD CONSTRAINT directly - it needs
+    # batch mode (recreates the table under the hood, copying the
+    # data). Standalone op.add_column + op.create_foreign_key (as
+    # autogenerate originally produced them) fail with
     # "No support for ALTER of constraints in SQLite dialect".
     with op.batch_alter_table('profissionais', schema=None) as batch_op:
         batch_op.add_column(sa.Column('perfil_acesso_id', sa.Integer(), nullable=True))

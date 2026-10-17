@@ -7,7 +7,7 @@ const consultaId = obterParametroURL("consulta_id");
 let nomePorEspecialidadeId = {};
 
 // =====================================================================
-// Carrega o título da consulta
+// Loads the consultation title
 // =====================================================================
 async function carregarTituloConsulta() {
   const resposta = await fetch(`/consultas/${consultaId}`);
@@ -21,7 +21,7 @@ async function carregarTituloConsulta() {
 }
 
 // =====================================================================
-// Carrega as especialidades para o <select>
+// Loads the specialties for the <select>
 // =====================================================================
 async function carregarEspecialidades() {
   const resposta = await fetch("/especialidades/");
@@ -92,7 +92,7 @@ async function carregarEncaminhamentos() {
 }
 
 // =====================================================================
-// Registra um novo encaminhamento
+// Registers a new referral
 // =====================================================================
 document.getElementById("formEncaminhamento").addEventListener("submit", async (evento) => {
   evento.preventDefault();
@@ -177,7 +177,7 @@ async function removerEncaminhamento(encaminhamentoId) {
 }
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (!consultaId) {
   document.getElementById("tituloConsulta").textContent = "Nenhuma consulta selecionada.";

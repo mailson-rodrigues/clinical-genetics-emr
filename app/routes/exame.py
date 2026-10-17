@@ -31,7 +31,7 @@ def criar_exame(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("exames")),
 ):
-    """Registra a solicitação de um exame para a consulta. Requer login."""
+    """Registers the request of an exam for the consultation. Requires login."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -60,7 +60,7 @@ def criar_exame(
 
 @router.get("/{consulta_id}/exames", response_model=List[ExameResponse])
 def listar_exames(consulta_id: int, db: Session = Depends(get_db)):
-    """Lista os exames registrados para uma consulta."""
+    """Lists the exams registered for a consultation."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")

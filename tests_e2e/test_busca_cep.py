@@ -5,13 +5,13 @@ from playwright.sync_api import expect
 
 def test_busca_endereco_por_cep_preenche_campos(pagina_logada_admin):
     """
-    A busca de endereço usa a API pública do ViaCEP (ver
-    buscarEnderecoPorCep em enderecos.js) - mockada aqui via
-    page.route() para o teste não depender dela estar no ar nem gastar
-    uma chamada real. Confirma que, ao digitar um CEP de 8 dígitos em
-    pacientes-cadastrar.html, os campos Endereço/Bairro/Cidade/UF são
-    preenchidos a partir da resposta (fake) da API, e continuam
-    editáveis depois.
+    The address lookup uses the public ViaCEP API (see
+    buscarEnderecoPorCep in enderecos.js) - mocked here via
+    page.route() so the test does not depend on it being up nor spend
+    a real call. Confirms that, when typing an 8-digit CEP in
+    pacientes-cadastrar.html, the Endereço/Bairro/Cidade/UF fields are
+    filled from the (fake) API response, and remain
+    editable afterwards.
     """
     page = pagina_logada_admin
 
@@ -28,8 +28,8 @@ def test_busca_endereco_por_cep_preenche_campos(pagina_logada_admin):
 
     page.route("https://viacep.com.br/ws/**", responder_com_endereco_fake)
 
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/pacientes-cadastrar.html", wait_until="domcontentloaded")
 
     page.fill("#cep", "64000000")
@@ -39,18 +39,18 @@ def test_busca_endereco_por_cep_preenche_campos(pagina_logada_admin):
     expect(page.locator("#cidade")).to_have_value("Teresina")
     expect(page.locator("#uf")).to_have_value("PI")
 
-    # Os campos continuam editáveis depois do preenchimento automático -
-    # não travamos nada (ver comentário em enderecos.js).
+    # The fields remain editable after the automatic filling -
+    # we do not lock anything (see the comment in enderecos.js).
     page.fill("#endereco", "Rua Corrigida Manualmente")
     expect(page.locator("#endereco")).to_have_value("Rua Corrigida Manualmente")
 
 
 def test_busca_endereco_por_cep_nao_encontrado_mostra_aviso_discreto(pagina_logada_admin):
     """
-    CEP inexistente: a API real do ViaCEP responde 200 com
-    {"erro": true} (sem lançar HTTP de erro) - mockamos esse mesmo
-    formato. O formulário não deve travar nem mostrar popup - só um
-    aviso discreto ao lado do campo CEP.
+    Nonexistent CEP: the real ViaCEP API answers 200 with
+    {"erro": true} (without raising an HTTP error) - we mock that same
+    format. The form must not freeze nor show a popup - only a
+    discreet notice next to the CEP field.
     """
     page = pagina_logada_admin
 

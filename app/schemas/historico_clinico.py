@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 
-# ---------- Itens clínicos genéricos (alergia, cirurgia, histórico) ----------
+# ---------- Generic clinical items (allergy, surgery, history) ----------
 
 class ItemClinicoCreate(BaseModel):
     descricao: str
@@ -18,7 +18,7 @@ class ItemClinicoResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ---------- Doença (com vínculo opcional a um código CID) ----------
+# ---------- Disease (with optional link to a CID code) ----------
 
 class DoencaCreate(BaseModel):
     descricao: str
@@ -35,7 +35,7 @@ class DoencaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ---------- Operadoras (catálogo de convênios) ----------
+# ---------- Insurers (health plan catalog) ----------
 
 class OperadoraCreate(BaseModel):
     nome: str
@@ -48,7 +48,7 @@ class OperadoraResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ---------- Vínculo paciente <-> convênio ----------
+# ---------- Patient <-> health plan link ----------
 
 class PacienteConvenioCreate(BaseModel):
     operadora_id: int

@@ -3,10 +3,10 @@ async function carregarEspecialidades() {
   const resposta = await fetch("/especialidades/");
   const especialidades = await resposta.json();
 
-  // innerHTML fixo (não appendChild) - esta função é chamada de novo
-  // depois de cadastrar uma especialidade pelo modal (ver
-  // formNovaEspecialidade abaixo), então precisa ser seguro rodar mais
-  // de uma vez sem duplicar as opções já existentes.
+  // fixed innerHTML (not appendChild) - this function is called again
+  // after registering a specialty through the modal (see
+  // formNovaEspecialidade below), so it must be safe to run more
+  // than once without duplicating the existing options.
   select.innerHTML = '<option value="">Não informar</option>';
   for (const especialidade of especialidades) {
     const opcao = document.createElement("option");
@@ -17,11 +17,11 @@ async function carregarEspecialidades() {
 }
 
 // =====================================================================
-// Modal "Nova especialidade" - cadastra direto do formulário de
-// profissional, sem precisar sair da página. POST /especialidades/ não
-// exige administrador hoje (ao contrário de CID/Operadora) - qualquer
-// profissional logado pode cadastrar; usamos fetchAutenticado mesmo
-// assim, por consistência com o resto do formulário.
+// "Nova especialidade" modal - registers directly from the
+// professional form, without leaving the page. POST /especialidades/ does not
+// currently require an administrator (unlike CID/Operadora) - any
+// logged-in professional can register; we use fetchAutenticado anyway,
+// for consistency with the rest of the form.
 // =====================================================================
 const modalEspecialidade = document.getElementById("modalEspecialidade");
 
@@ -65,13 +65,13 @@ document.getElementById("formNovaEspecialidade").addEventListener("submit", asyn
 });
 
 // =====================================================================
-// Carrega os perfis de acesso para o <select> do formulário. A rota é
-// restrita a administrador - se quem está usando a página ainda não
-// tem sessão de admin (ex: cadastrando o primeiro administrador do
-// sistema), a busca falha silenciosamente e o campo fica desabilitado,
-// sem travar o resto da página. Usa fetch simples (não
-// fetchAutenticado) para evitar o redirecionamento automático em caso
-// de 401 nesse cenário de bootstrap.
+// Loads the access profiles for the form's <select>. The route is
+// restricted to administrators - if whoever is using the page does not yet
+// have an admin session (e.g.: registering the first administrator of the
+// system), the lookup fails silently and the field is disabled,
+// without freezing the rest of the page. Uses plain fetch (not
+// fetchAutenticado) to avoid the automatic redirect on a
+// 401 in that bootstrap scenario.
 // =====================================================================
 async function carregarPerfisAcesso() {
   const select = document.getElementById("perfilAcesso");
@@ -97,8 +97,8 @@ async function carregarPerfisAcesso() {
 }
 
 // =====================================================================
-// O perfil de acesso só se aplica a profissionais não-administradores
-// (administrador tem acesso total, sem precisar de perfil).
+// The access profile only applies to non-administrator professionals
+// (an administrator has full access, with no need for a profile).
 // =====================================================================
 function atualizarVisibilidadePerfilAcesso() {
   const nivel = document.getElementById("nivelAcesso").value;
@@ -123,8 +123,8 @@ async function carregarProfissionais() {
   const [respostaProfissionais, respostaEspecialidades, respostaPerfis] = await Promise.all([
     fetch("/profissionais/"),
     fetch("/especialidades/"),
-    // GET /perfis-acesso/ é restrita a administrador - se falhar (ex:
-    // sem sessão de admin), a coluna de perfil só cai no "-" abaixo.
+    // GET /perfis-acesso/ is restricted to administrators - if it fails (e.g.:
+    // no admin session), the profile column just falls back to the "-" below.
     fetch("/perfis-acesso/", { headers: token ? { Authorization: `Bearer ${token}` } : {} }),
   ]);
 

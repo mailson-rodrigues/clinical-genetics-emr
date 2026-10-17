@@ -17,10 +17,10 @@ async function carregarTituloConsulta() {
 }
 
 // =====================================================================
-// Lista de fontes de uma hipótese (título + link clicável + origem) -
-// função isolada porque é reaproveitada tanto na renderização inicial
-// quanto para atualizar só essa lista depois de "Buscar mais fontes"
-// (sem recarregar a página).
+// List of sources of a hypothesis (title + clickable link + origin) -
+// isolated function because it is reused both in the initial rendering
+// and to update only this list after "Buscar mais fontes"
+// (without reloading the page).
 // =====================================================================
 function renderizarFontes(fontes) {
   if (fontes.length === 0) {
@@ -45,9 +45,9 @@ function renderizarHipoteses(hipoteses) {
     return;
   }
 
-  // Mais provável primeiro - já vem ordenado da API (?consulta_id=...
-  // ordena por "ordem" no backend), mas reordena aqui também para não
-  // depender disso.
+  // Most likely first - it already comes sorted from the API (?consulta_id=...
+  // sorts by "ordem" in the backend), but we reorder here too so as not to
+  // depend on that.
   const hipotesesOrdenadas = [...hipoteses].sort((a, b) => a.ordem - b.ordem);
 
   container.innerHTML = "";
@@ -108,8 +108,8 @@ document.getElementById("btnGerarHipoteses").addEventListener("click", async () 
 });
 
 // =====================================================================
-// "Buscar mais fontes" - chama a rota de mais-fontes e atualiza só a
-// lista de fontes daquela hipótese, sem recarregar a página inteira.
+// "Buscar mais fontes" - calls the more-sources route and updates only the
+// list of sources of that hypothesis, without reloading the whole page.
 // =====================================================================
 async function buscarMaisFontes(hipoteseId) {
   const mensagem = document.getElementById(`mensagemMaisFontes${hipoteseId}`);
@@ -138,7 +138,7 @@ async function buscarMaisFontes(hipoteseId) {
 }
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (!consultaId) {
   document.getElementById("tituloConsulta").textContent = "Nenhuma consulta selecionada.";

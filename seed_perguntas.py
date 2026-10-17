@@ -1,9 +1,9 @@
 """
-Script para popular o banco com o roteiro padrão de perguntas de anamnese
-genética. Pressupõe que as tabelas já existem (criadas via Alembic:
+Script to populate the database with the default script of genetic
+anamnesis questions. Assumes the tables already exist (created via Alembic:
 `alembic upgrade head`).
 
-Como rodar:
+How to run:
     python seed_perguntas.py
 """
 

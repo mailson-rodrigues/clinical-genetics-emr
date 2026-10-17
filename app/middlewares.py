@@ -5,18 +5,18 @@ from app.database import SessionLocal
 from app.models.log_auditoria import LogAuditoria
 from app.services.seguranca import decodificar_token
 
-# Extensões/rotas que NÃO geram log (arquivos estáticos do frontend e
-# documentação automática do Swagger) - evita poluir o log com ruído.
+# Extensions/routes that do NOT generate logs (the frontend static files and
+# the automatic Swagger documentation) - avoids polluting the log with noise.
 EXTENSOES_IGNORADAS = (".html", ".js", ".css", ".svg", ".png", ".jpg", ".ico")
 PREFIXOS_IGNORADOS = ("/docs", "/openapi", "/redoc")
 
 
 async def middleware_log_auditoria(request: Request, call_next):
     """
-    Middleware que registra automaticamente TODA chamada relevante feita
-    à API: quem fez (se autenticado), método HTTP, caminho, e o status
-    de resposta. Roda em toda requisição, sem precisar instrumentar cada
-    rota manualmente.
+    Middleware that automatically logs EVERY relevant call made
+    to the API: who made it (if authenticated), HTTP method, path, and the response
+    status. Runs on every request, without needing to instrument each
+    route manually.
     """
     caminho = request.url.path
 

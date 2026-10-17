@@ -1,8 +1,8 @@
 // =====================================================================
-// Utilitários de endereço, compartilhados por pacientes.js e
-// paciente-editar.js (mesmos ids de campo: #cep, #endereco, #bairro,
-// #cidade, #uf, #mensagemCep) - inclua ANTES do script específico da
-// página, depois de auth.js.
+// Address utilities, shared by pacientes.js and
+// paciente-editar.js (same field ids: #cep, #endereco, #bairro,
+// #cidade, #uf, #mensagemCep) - include BEFORE the page-specific
+// script, after auth.js.
 // =====================================================================
 
 const UFS = [
@@ -50,12 +50,12 @@ function apenasDigitos(texto) {
 }
 
 // =====================================================================
-// Busca o endereço pelo CEP na API pública do ViaCEP e preenche
-// Endereço/Bairro/Cidade/UF - os campos continuam editáveis depois
-// (não travamos nada), para o profissional corrigir se o retorno vier
-// incompleto. Falha de rede ou CEP inexistente não trava o formulário:
-// só mostra um aviso discreto (sem popup) e deixa o preenchimento
-// manual normal.
+// Looks up the address by CEP in the public ViaCEP API and fills in
+// Endereço/Bairro/Cidade/UF - the fields remain editable afterwards
+// (we do not lock anything), so the professional can correct it if the result is
+// incomplete. A network failure or a nonexistent CEP does not freeze the form:
+// it only shows a discreet notice (no popup) and leaves normal
+// manual filling.
 // =====================================================================
 async function buscarEnderecoPorCep(cep) {
   const elementoMensagem = document.getElementById("mensagemCep");
@@ -86,13 +86,13 @@ async function buscarEnderecoPorCep(cep) {
 }
 
 // =====================================================================
-// Dispara a busca quando o campo perde o foco ou assim que atinge 8
-// dígitos (permite completar via teclado sem precisar sair do campo).
-// Memoriza o último CEP já consultado para não repetir a mesma busca -
-// sem isso, o "input" dispara ao digitar o 8º dígito e o "blur" dispara
-// de novo (mesmo CEP) ao sair do campo logo em seguida, e a resposta
-// dessa segunda busca (assíncrona) pode sobrescrever uma correção
-// manual que o profissional já tenha feito no meio do caminho.
+// Triggers the lookup when the field loses focus or as soon as it reaches 8
+// digits (allows completing via keyboard without leaving the field).
+// Remembers the last CEP already queried to avoid repeating the same lookup -
+// without that, "input" fires when typing the 8th digit and "blur" fires
+// again (same CEP) when leaving the field right after, and the response
+// of that second (asynchronous) lookup could overwrite a manual
+// correction the professional had already made in the meantime.
 // =====================================================================
 let ultimoCepConsultado = null;
 

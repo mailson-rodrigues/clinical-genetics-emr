@@ -5,9 +5,9 @@ from app.database import Base
 
 class LogAuditoria(Base):
     """
-    Registro de auditoria: uma linha para cada ação relevante feita no
-    sistema (quem, o quê, quando, resultado). Gerado automaticamente por
-    um middleware - não é necessário chamar isso manualmente nas rotas.
+    Audit record: one row for each relevant action performed in the
+    system (who, what, when, result). Generated automatically by
+    a middleware - there is no need to call this manually in the routes.
     """
     __tablename__ = "logs_auditoria"
 

@@ -1,5 +1,5 @@
 // =====================================================================
-// Verifica permissão antes de mostrar qualquer conteúdo
+// Checks permission before showing any content
 // =====================================================================
 function verificarPermissao() {
   if (!ehAdministrador()) {
@@ -12,7 +12,7 @@ function verificarPermissao() {
 }
 
 // =====================================================================
-// Formata visualmente o status HTTP com uma classe de cor
+// Visually formats the HTTP status with a color class
 // =====================================================================
 function classePorStatus(statusCode) {
   if (!statusCode) return "";
@@ -23,8 +23,8 @@ function classePorStatus(statusCode) {
 }
 
 // =====================================================================
-// Carrega a lista de profissionais para o filtro e para exibir nomes
-// (em vez de só o ID) na tabela.
+// Loads the list of professionals for the filter and to show names
+// (instead of just the ID) in the table.
 // =====================================================================
 let nomePorProfissionalId = {};
 
@@ -96,7 +96,7 @@ async function carregarLogs() {
 document.getElementById("btnFiltrar").addEventListener("click", carregarLogs);
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (verificarPermissao()) {
   carregarProfissionaisParaFiltro().then(carregarLogs);

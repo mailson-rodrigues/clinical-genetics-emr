@@ -3,10 +3,10 @@ from playwright.sync_api import expect
 
 def test_dashboard_mostra_indicadores_apos_login(pagina_logada_admin):
     """
-    Confirma que a página inicial (dashboard) renderiza os 4 cards de
-    indicadores com números de verdade (não travados no "-" inicial,
-    nem "undefined"/"NaN") depois do GET /dashboard/resumo. Não valida
-    os valores exatos - só que a estrutura carrega sem erro.
+    Confirms that the home page (dashboard) renders the 4 indicator cards
+    with real numbers (not stuck on the initial "-", nor "undefined"/"NaN")
+    after GET /dashboard/resumo. Does not validate
+    the exact values - only that the structure loads without errors.
     """
     page = pagina_logada_admin
 

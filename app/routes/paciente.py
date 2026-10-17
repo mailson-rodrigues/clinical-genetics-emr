@@ -13,7 +13,7 @@ router = APIRouter(prefix="/pacientes", tags=["Pacientes"])
 
 @router.post("/", response_model=PacienteResponse, status_code=201)
 def criar_paciente(paciente: PacienteCreate, db: Session = Depends(get_db)):
-    """Cria um novo paciente."""
+    """Creates a new patient."""
     existente = db.query(Paciente).filter(Paciente.documento == paciente.documento).first()
     if existente:
         raise HTTPException(status_code=400, detail="Já existe um paciente com esse documento.")
@@ -36,14 +36,14 @@ def listar_pacientes(
     profissional_atual: Optional[Profissional] = Depends(obter_profissional_opcional),
 ):
     """
-    Lista os pacientes cadastrados, paginado (?skip=0&limit=50, limit
-    máximo 200), mais recentes primeiro. Por padrão só traz pacientes
-    ativos (não removidos); ?incluir_inativos=true também traz os
-    removidos (soft delete), restrito a ADMINISTRADOR. Use ?busca=texto
-    para filtrar por nome ou documento/CPF (parcial, sem diferenciar
-    maiúsculas/minúsculas), combinável com skip/limit. O total de
-    registros (considerando esses filtros, mas não a paginação) vai no
-    header "X-Total-Count" da resposta.
+    Lists the registered patients, paginated (?skip=0&limit=50, maximum
+    limit 200), most recent first. By default only returns active patients
+    (not removed); ?incluir_inativos=true also returns the
+    removed ones (soft delete), restricted to ADMINISTRATOR. Use ?busca=text
+    to filter by name or document/CPF (partial, case-insensitive),
+    combinable with skip/limit. The total number of
+    records (considering these filters, but not the pagination) goes in the
+    "X-Total-Count" response header.
     """
     query = db.query(Paciente)
 
@@ -68,7 +68,7 @@ def listar_pacientes(
 
 @router.get("/{paciente_id}", response_model=PacienteResponse)
 def buscar_paciente(paciente_id: int, db: Session = Depends(get_db)):
-    """Busca um paciente específico pelo id."""
+    """Fetches a specific patient by id."""
     paciente = db.query(Paciente).filter(Paciente.id == paciente_id).first()
     if not paciente:
         raise HTTPException(status_code=404, detail="Paciente não encontrado.")
@@ -83,8 +83,8 @@ def atualizar_paciente(
     _administrador: Profissional = Depends(exigir_administrador),
 ):
     """
-    Atualiza os dados de um paciente já cadastrado (ex: corrigir nome
-    digitado errado). Requer login como ADMINISTRADOR.
+    Updates the data of an already registered patient (e.g. fixing a
+    misspelled name). Requires login as ADMINISTRATOR.
     """
     paciente = db.query(Paciente).filter(Paciente.id == paciente_id).first()
     if not paciente:
@@ -106,12 +106,12 @@ def remover_paciente(
     _administrador: Profissional = Depends(exigir_administrador),
 ):
     """
-    Remove um paciente do sistema. Requer login como ADMINISTRADOR.
+    Removes a patient from the system. Requires login as ADMINISTRATOR.
 
-    Isso é um soft delete: a linha não é apagada de verdade (o registro é
-    só marcado como ativo=False), para preservar consultas/histórico
-    clínico já vinculados a ele. Pode ser revertido via
-    PUT /pacientes/{id} com {"ativo": true}.
+    This is a soft delete: the row is not really deleted (the record is
+    only marked as ativo=False), to preserve the consultations/clinical
+    history already linked to it. It can be reverted via
+    PUT /pacientes/{id} with {"ativo": true}.
     """
     paciente = db.query(Paciente).filter(Paciente.id == paciente_id).first()
     if not paciente:

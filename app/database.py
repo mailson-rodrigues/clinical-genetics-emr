@@ -6,32 +6,32 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 load_dotenv()
 
-# Em desenvolvimento local, sem nenhuma configuração extra, usamos SQLite
-# (arquivo "heredograma.db"). Em produção, defina DATABASE_URL no .env
-# apontando para um Postgres, no formato:
+# In local development, with no extra configuration, we use SQLite
+# (file "heredograma.db"). In production, set DATABASE_URL in .env
+# pointing to a Postgres, in the format:
 #   postgresql://usuario:senha@host:porta/nome_banco
-# e rode `alembic upgrade head` para criar as tabelas lá - o restante do
-# código (models, rotas, Alembic) não precisa de nenhuma alteração.
+# and run `alembic upgrade head` to create the tables there - the rest of the
+# code (models, routes, Alembic) needs no changes.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./heredograma.db")
 
-# "check_same_thread" só existe/faz sentido para SQLite; passar isso para
-# o driver do Postgres (psycopg2) causaria erro de conexão.
+# "check_same_thread" only exists/makes sense for SQLite; passing it to
+# the Postgres driver (psycopg2) would cause a connection error.
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
-# "engine" é a conexão com o banco de dados
+# "engine" is the connection to the database
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
-# "SessionLocal" é usado para abrir conversas (sessões) com o banco a cada requisição
+# "SessionLocal" is used to open conversations (sessions) with the database on each request
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# "Base" é a classe da qual todos os nossos modelos (tabelas) vão herdar
+# "Base" is the class that all our models (tables) will inherit from
 Base = declarative_base()
 
 
 def get_db():
     """
-    Fornece uma sessão de banco de dados para cada requisição da API
-    e garante que ela seja fechada corretamente depois.
+    Provides a database session for each API request
+    and guarantees it is closed properly afterwards.
     """
     db = SessionLocal()
     try:

@@ -1,10 +1,10 @@
 """
-Script para expandir o catálogo de códigos CID-10 com códigos de
-genética/doenças raras/oncologia hereditária. Pressupõe que as tabelas
-já existem (via Alembic) - complementa seed_cids.py, sem duplicar
-códigos já cadastrados.
+Script to expand the catalog of CID-10 codes with codes for
+genetics/rare diseases/hereditary oncology. Assumes the tables
+already exist (via Alembic) - complements seed_cids.py, without duplicating
+codes already registered.
 
-Como rodar:
+How to run:
     python seed_cids_genetica.py
 """
 

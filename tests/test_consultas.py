@@ -113,7 +113,7 @@ def test_gerar_heredograma_sem_respostas(client, consulta_exemplo, profissional_
 def test_gerar_heredograma_acima_do_limite_retorna_429(
     client, consulta_exemplo, pergunta_exemplo, profissional_token, mocker, heredograma_exemplo
 ):
-    """A rota é limitada a 60 requisições/minuto por IP (ver app/rate_limit.py)."""
+    """The route is limited to 60 requests/minute per IP (see app/rate_limit.py)."""
     client.post(
         f"/consultas/{consulta_exemplo['id']}/respostas",
         json={"pergunta_id": pergunta_exemplo.id, "resposta_texto": "Câncer de próstata no pai."},

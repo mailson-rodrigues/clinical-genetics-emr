@@ -1,4 +1,4 @@
-"""baseline - estado atual do banco
+"""baseline - current state of the database
 
 Revision ID: 45e7a1bd93b0
 Revises:
@@ -20,20 +20,20 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """
-    Cria o schema inicial do projeto (todas as tabelas anteriores à
-    introdução do Alembic).
+    Creates the initial schema of the project (all the tables that existed
+    before Alembic was introduced).
 
-    NOTA: esta função ficou vazia (`pass`) até 2026-07-25 porque, quando
-    esta baseline foi gerada, as tabelas já existiam no heredograma.db
-    (criadas direto via Base.metadata.create_all(), antes do Alembic
-    entrar no projeto) - então "rodar" a baseline nesse banco não
-    precisava fazer nada. Isso passou despercebido até tentarmos rodar
-    `alembic upgrade head` num banco NOVO (vazio) do zero - primeiro nos
-    testes E2E, mas o mesmo aconteceria em qualquer Postgres de produção
-    provisionado hoje: sem essa correção, upgrade head não criaria
-    nenhuma tabela. Preencher esta função é seguro para o heredograma.db
-    existente, porque essa revisão já está marcada como aplicada nele
-    (não roda de novo).
+    NOTE: this function was empty (`pass`) until 2026-07-25 because, when
+    this baseline was generated, the tables already existed in heredograma.db
+    (created directly via Base.metadata.create_all(), before Alembic
+    joined the project) - so "running" the baseline on that database did not
+    need to do anything. This went unnoticed until we tried to run
+    `alembic upgrade head` on a NEW (empty) database from scratch - first in the
+    E2E tests, but the same would happen on any production Postgres
+    provisioned today: without this fix, upgrade head would not create
+    any table. Filling in this function is safe for the existing
+    heredograma.db, because that revision is already marked as applied on it
+    (it does not run again).
     """
     op.create_table(
         'especialidades',
@@ -264,7 +264,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    """Reverte o schema inicial (ordem inversa da criação, por causa das FKs)."""
+    """Reverts the initial schema (reverse creation order, because of the FKs)."""
     op.drop_index(op.f('ix_logs_auditoria_id'), table_name='logs_auditoria')
     op.drop_table('logs_auditoria')
 

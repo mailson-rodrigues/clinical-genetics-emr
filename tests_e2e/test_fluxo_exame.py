@@ -15,9 +15,9 @@ def test_registrar_exame_e_persistir_status(pagina_logada_admin):
     linha_consulta.get_by_role("link", name="Exames").click()
     page.wait_for_url(re.compile(r".*/exames\.html\?consulta_id=\d+$"))
 
-    # Não geramos heredograma real nesta consulta, então o select de
-    # indivíduo fica desabilitado - o exame é registrado sem vínculo,
-    # como "paciente/consulta geral" (comportamento coberto por
+    # We do not generate a real pedigree in this consultation, so the individual
+    # select stays disabled - the exam is registered without a link,
+    # as "general patient/consultation" (behavior covered by
     # tests/test_exames.py::test_criar_exame_sem_vincular_individuo).
     page.fill("#tipoExame", "Painel BRCA1/BRCA2")
     page.click("#formExame button[type=submit]")

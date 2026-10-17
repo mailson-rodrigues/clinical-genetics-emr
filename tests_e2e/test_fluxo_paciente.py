@@ -10,10 +10,10 @@ def test_cadastrar_buscar_editar_e_remover_paciente(pagina_logada_admin):
     documento = gerar_cpf_unico()
 
     # -----------------------------------------------------------------
-    # Cadastro (tela pacientes-cadastrar.html, formulário completo)
+    # Registration (pacientes-cadastrar.html screen, full form)
     # -----------------------------------------------------------------
-    # domcontentloaded em vez do padrão "load" - ver nota em conftest.py
-    # (pagina_logada_admin) sobre por que "load" é instável neste ambiente.
+    # domcontentloaded instead of the default "load" - see the note in conftest.py
+    # (pagina_logada_admin) about why "load" is unstable in this environment.
     page.goto("/pacientes-cadastrar.html", wait_until="domcontentloaded")
 
     page.fill("#nome", "Paciente E2E Completo")
@@ -41,12 +41,12 @@ def test_cadastrar_buscar_editar_e_remover_paciente(pagina_logada_admin):
     mensagem.wait_for()
     assert "sucesso" in mensagem.inner_text().lower()
 
-    # O cadastro redireciona automaticamente para a tela de busca.
+    # Registration automatically redirects to the search screen.
     page.wait_for_url(re.compile(r".*/pacientes\.html$"))
 
     # -----------------------------------------------------------------
-    # Busca (tela pacientes.html) - localiza o paciente recém-criado
-    # pelo CPF, já que a lista inicial só traz os mais recentes.
+    # Search (pacientes.html screen) - locates the newly created patient
+    # by CPF, since the initial list only brings the most recent ones.
     # -----------------------------------------------------------------
     page.fill("#buscaPaciente", documento)
     linha_paciente = page.locator("#corpoTabelaPacientes tr", has_text=documento)
@@ -54,15 +54,15 @@ def test_cadastrar_buscar_editar_e_remover_paciente(pagina_logada_admin):
     assert linha_paciente.count() == 1
 
     # -----------------------------------------------------------------
-    # Edição (abre preenchido, altera telefone, salva)
+    # Editing (opens pre-filled, changes the phone, saves)
     # -----------------------------------------------------------------
     linha_paciente.get_by_role("link", name="Editar").click()
     page.wait_for_url(re.compile(r".*/paciente-editar\.html\?paciente_id=\d+$"))
 
-    # expect(...) re-tenta automaticamente até o valor bater (ou expirar o
-    # timeout) - paciente-editar.js preenche o formulário via fetch()
-    # assíncrono após a navegação, então checar input_value() direto (sem
-    # retry) pode rodar antes do preenchimento terminar.
+    # expect(...) automatically retries until the value matches (or the
+    # timeout expires) - paciente-editar.js fills in the form via an
+    # asynchronous fetch() after navigation, so checking input_value() directly (without
+    # retry) may run before the filling finishes.
     expect(page.locator("#nome")).to_have_value("Paciente E2E Completo")
     expect(page.locator("#cidade")).to_have_value("Teresina")
 
@@ -76,11 +76,11 @@ def test_cadastrar_buscar_editar_e_remover_paciente(pagina_logada_admin):
     assert "sucesso" in mensagem_edicao.inner_text().lower()
 
     # -----------------------------------------------------------------
-    # Confirma persistência: volta para a lista (via menu), busca de
-    # novo e reabre a edição. Navega por clique (link "Pacientes" do
-    # menu), não por goto() - ver nota em conftest.py
-    # (pagina_logada_admin) sobre instabilidade de chamadas explícitas
-    # de navegação em sequência neste ambiente.
+    # Confirms persistence: goes back to the list (via the menu), searches
+    # again and reopens the edit. Navigates by click ("Pacientes" link of the
+    # menu), not by goto() - see the note in conftest.py
+    # (pagina_logada_admin) about the instability of explicit
+    # navigation calls in sequence in this environment.
     # -----------------------------------------------------------------
     page.get_by_role("link", name="Pacientes").click()
     page.wait_for_url(re.compile(r".*/pacientes\.html$"))
@@ -93,8 +93,8 @@ def test_cadastrar_buscar_editar_e_remover_paciente(pagina_logada_admin):
     expect(page.locator("#telefone")).to_have_value(novo_telefone)
 
     # -----------------------------------------------------------------
-    # Remoção (soft delete) - confirm() e alert() nativos precisam ser
-    # aceitos explicitamente, senão o Playwright os dispensa por padrão.
+    # Removal (soft delete) - native confirm() and alert() must be
+    # accepted explicitly, otherwise Playwright dismisses them by default.
     # -----------------------------------------------------------------
     page.on("dialog", lambda dialog: dialog.accept())
     page.click("#btnRemoverPaciente")

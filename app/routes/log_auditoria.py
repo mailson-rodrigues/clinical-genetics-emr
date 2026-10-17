@@ -19,9 +19,9 @@ def listar_logs(
     _administrador: Profissional = Depends(exigir_administrador),
 ):
     """
-    Lista os registros de auditoria mais recentes primeiro. Requer login
-    como ADMINISTRADOR. Filtro opcional por profissional (?profissional_id=1)
-    e limite de resultados (?limite=50, máximo 500).
+    Lists the audit records, most recent first. Requires login
+    as ADMINISTRATOR. Optional filter by professional (?profissional_id=1)
+    and result limit (?limite=50, maximum 500).
     """
     query = db.query(LogAuditoria).order_by(LogAuditoria.id.desc())
     if profissional_id is not None:

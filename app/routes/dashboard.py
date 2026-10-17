@@ -32,9 +32,9 @@ def obter_resumo(
     _profissional: Profissional = Depends(obter_profissional_atual),
 ):
     """
-    Indicadores agregados para o dashboard (página inicial). Requer
-    login, sem restrição de perfil/módulo - são só contadores, não
-    dados individuais sensíveis.
+    Aggregated indicators for the dashboard (home page). Requires
+    login, with no profile/module restriction - these are only counters, not
+    sensitive individual data.
     """
     inicio_mes = _inicio_do_mes_atual()
     inicio_proximo_mes = _inicio_do_proximo_mes(inicio_mes)
@@ -55,8 +55,8 @@ def obter_resumo(
         db.query(Exame).filter(Exame.status.in_(["solicitado", "em_andamento"])).count()
     )
 
-    # Consulta não tem relationship para Paciente (só a FK paciente_id) -
-    # join explícito trazendo os dois lados em vez de acessar
+    # Consulta has no relationship to Paciente (only the paciente_id FK) -
+    # explicit join bringing both sides instead of accessing
     # consulta.paciente.
     ultimas_consultas = (
         db.query(Consulta, Paciente)

@@ -1,5 +1,5 @@
 // =====================================================================
-// Verifica permissão antes de mostrar qualquer conteúdo
+// Checks permission before showing any content
 // =====================================================================
 function verificarPermissao() {
   if (!ehAdministrador()) {
@@ -93,7 +93,7 @@ document.getElementById("formCid").addEventListener("submit", async (evento) => 
   }
 });
 
-// Busca com um pequeno debounce - evita uma requisição por tecla digitada.
+// Search with a small debounce - avoids one request per typed key.
 let timeoutBuscaCid = null;
 document.getElementById("buscaCid").addEventListener("input", () => {
   clearTimeout(timeoutBuscaCid);
@@ -168,7 +168,7 @@ document.getElementById("formOperadora").addEventListener("submit", async (event
 });
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 if (verificarPermissao()) {
   carregarCids();

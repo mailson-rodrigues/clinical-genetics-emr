@@ -21,9 +21,9 @@ from app.services.seguranca import gerar_hash_senha
 TEST_DATABASE_PATH = os.path.join(os.path.dirname(__file__), "..", "test_heredograma.db")
 TEST_DATABASE_URL = f"sqlite:///{TEST_DATABASE_PATH}"
 
-# Uploads de teste isolados do diretório uploads/ real (dev) - ver
+# Test uploads isolated from the real uploads/ directory (dev) - see
 # app/services/armazenamento.py (lido dinamicamente via
-# armazenamento_module.DIRETORIO_UPLOADS, não importado por nome, para
+# armazenamento_module.DIRETORIO_UPLOADS, not imported by name, so that
 # este monkeypatch funcionar).
 TEST_UPLOAD_DIR = Path(os.path.dirname(__file__)) / ".." / "test_uploads"
 armazenamento_module.DIRETORIO_UPLOADS = TEST_UPLOAD_DIR
@@ -42,10 +42,10 @@ def _get_db_teste():
 
 app.dependency_overrides[get_db] = _get_db_teste
 
-# O middleware de auditoria abre sua própria sessão direto de
-# app.database.SessionLocal (sem passar pelo Depends(get_db)), então
-# precisa ser redirecionado também - senão os testes gravariam logs de
-# auditoria no heredograma.db real mesmo com o get_db sobrescrito.
+# The audit middleware opens its own session directly from
+# app.database.SessionLocal (without going through Depends(get_db)), so
+# it also needs to be redirected - otherwise the tests would write audit logs
+# to the real heredograma.db even with get_db overridden.
 middlewares_module.SessionLocal = SessionLocalTeste
 
 
@@ -59,10 +59,10 @@ def tabelas_de_teste():
 @pytest.fixture(autouse=True)
 def resetar_rate_limit():
     """
-    O Limiter (slowapi) guarda os contadores em memória, na mesma
-    instância global para todo o processo - sem isso, chamadas de um
-    teste (ex: o que verifica o 429) contaminariam a contagem de outro
-    teste que chama a mesma rota limitada (POST .../gerar-heredograma).
+    The Limiter (slowapi) keeps its counters in memory, in the same
+    global instance for the whole process - without this, calls from one
+    test (e.g. the one that checks the 429) would contaminate the count of another
+    test that calls the same limited route (POST .../gerar-heredograma).
     """
     limiter.reset()
     yield
@@ -96,13 +96,13 @@ MODULOS_CODIGOS = ["pacientes", "consultas", "historico_clinico", "encaminhament
 
 def _obter_ou_criar_perfil_com_acesso_total(db_session):
     """
-    Perfil de acesso com TODOS os módulos liberados - usado como padrão
-    para os profissionais de teste "genéricos" (fixtures
-    `profissional_token`/`profissional_info`), para não quebrar testes
-    já existentes que dependiam de um profissional comum conseguir
-    fazer de tudo antes da introdução dos Perfis de Acesso granulares.
-    Testes que querem verificar RESTRIÇÃO de acesso criam seu próprio
-    perfil limitado (ver tests/test_perfis_acesso.py).
+    Access profile with ALL the modules enabled - used as the default
+    for the "generic" test professionals (fixtures
+    `profissional_token`/`profissional_info`), so as not to break tests
+    that already depended on a regular professional being able to do
+    everything before the introduction of the granular Access Profiles.
+    Tests that want to verify access RESTRICTION create their own
+    limited profile (see tests/test_perfis_acesso.py).
     """
     perfil = db_session.query(PerfilAcesso).filter(PerfilAcesso.nome == "Perfil Total (testes)").first()
     if perfil:
@@ -150,25 +150,25 @@ def _criar_profissional_e_logar(client, db_session, nivel_acesso, email):
 
 @pytest.fixture
 def admin_token(client, db_session):
-    """Cria um profissional administrador, loga via API e retorna o token de acesso."""
+    """Creates an administrator professional, logs in via API and returns the access token."""
     return _criar_profissional_e_logar(client, db_session, "administrador", "admin.teste@exemplo.com")["token"]
 
 
 @pytest.fixture
 def profissional_token(client, db_session):
-    """Cria um profissional comum, loga via API e retorna o token de acesso."""
+    """Creates a regular professional, logs in via API and returns the access token."""
     return _criar_profissional_e_logar(client, db_session, "profissional", "profissional.teste@exemplo.com")["token"]
 
 
 @pytest.fixture
 def profissional_info(client, db_session):
-    """Igual a `profissional_token`, mas também expõe o profissional_id (útil para conferir preenchimento automático)."""
+    """Same as `profissional_token`, but also exposes the profissional_id (useful to check automatic filling)."""
     return _criar_profissional_e_logar(client, db_session, "profissional", "profissional.info@exemplo.com")
 
 
 @pytest.fixture
 def paciente_exemplo(client):
-    """Cria um paciente de teste via API e retorna o corpo da resposta (dict)."""
+    """Creates a test patient via API and returns the response body (dict)."""
     dados = {
         "nome": "Paciente Exemplo",
         "data_nascimento": "1990-01-01",
@@ -182,7 +182,7 @@ def paciente_exemplo(client):
 
 @pytest.fixture
 def consulta_exemplo(client, paciente_exemplo, profissional_token):
-    """Cria uma consulta de teste vinculada a `paciente_exemplo`, via API."""
+    """Creates a test consultation linked to `paciente_exemplo`, via API."""
     dados = {
         "paciente_id": paciente_exemplo["id"],
         "condicao_investigada": "Câncer de mama hereditário",
@@ -199,8 +199,8 @@ def consulta_exemplo(client, paciente_exemplo, profissional_token):
 @pytest.fixture
 def pergunta_exemplo(db_session):
     """
-    Cria uma pergunta do roteiro de anamnese diretamente no banco (não há
-    rota de criação - em produção isso é feito via seed_perguntas.py).
+    Creates a question of the anamnesis script directly in the database (there is no
+    create route - in production this is done via seed_perguntas.py).
     """
     pergunta = Pergunta(
         codigo="CONDICAO_DESCRICAO",
@@ -217,9 +217,9 @@ def pergunta_exemplo(db_session):
 @pytest.fixture
 def heredograma_exemplo():
     """
-    Retorno fixo e determinístico equivalente ao que a IA (Claude)
-    retornaria para extrair_heredograma - usado para mockar a chamada
-    real à API da Anthropic nos testes (ver app/services/ia_extracao.py).
+    Fixed, deterministic return equivalent to what the AI (Claude)
+    would return for extrair_heredograma - used to mock the real
+    call to the Anthropic API in the tests (see app/services/ia_extracao.py).
     """
     return HeredogramaExtraido(
         individuos=[

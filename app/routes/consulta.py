@@ -30,7 +30,7 @@ def criar_consulta(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("consultas")),
 ):
-    """Inicia uma nova consulta/anamnese para um paciente já cadastrado. Requer login."""
+    """Starts a new consultation/anamnesis for an already registered patient. Requires login."""
     paciente = db.query(Paciente).filter(Paciente.id == consulta.paciente_id).first()
     if not paciente:
         raise HTTPException(status_code=404, detail="Paciente não encontrado.")
@@ -55,10 +55,10 @@ def listar_consultas(
     db: Session = Depends(get_db),
 ):
     """
-    Lista consultas, paginado (?skip=0&limit=50, limit máximo 200).
-    Opcionalmente filtra por paciente (?paciente_id=1). O total de
-    registros (já considerando o filtro, mas não a paginação) vai no
-    header "X-Total-Count" da resposta.
+    Lists consultations, paginated (?skip=0&limit=50, maximum limit 200).
+    Optionally filters by patient (?paciente_id=1). The total number of
+    records (already considering the filter, but not the pagination) goes in the
+    "X-Total-Count" response header.
     """
     query = db.query(Consulta)
     if paciente_id is not None:
@@ -70,7 +70,7 @@ def listar_consultas(
 
 @router.get("/{consulta_id}", response_model=ConsultaComRespostas)
 def buscar_consulta(consulta_id: int, db: Session = Depends(get_db)):
-    """Busca uma consulta específica, já com todas as respostas registradas."""
+    """Fetches a specific consultation, already with all the recorded answers."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -79,7 +79,7 @@ def buscar_consulta(consulta_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{consulta_id}", response_model=ConsultaResponse)
 def atualizar_consulta(consulta_id: int, dados: ConsultaUpdate, db: Session = Depends(get_db)):
-    """Atualiza dados da consulta (ex: marcar como concluída)."""
+    """Updates consultation data (e.g. mark it as completed)."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -100,7 +100,7 @@ def registrar_resposta(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("consultas")),
 ):
-    """Registra a resposta a uma pergunta do roteiro, dentro de uma consulta. Requer login."""
+    """Records the answer to a question of the script, within a consultation. Requires login."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -128,7 +128,7 @@ def atualizar_resposta(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("consultas")),
 ):
-    """Atualiza o texto de uma resposta já registrada nessa consulta. Requer login."""
+    """Updates the text of an answer already recorded in this consultation. Requires login."""
     resposta = db.query(Resposta).filter(
         Resposta.id == resposta_id,
         Resposta.consulta_id == consulta_id,
@@ -144,7 +144,7 @@ def atualizar_resposta(
 
 @router.get("/{consulta_id}/respostas", response_model=List[RespostaResponse])
 def listar_respostas(consulta_id: int, db: Session = Depends(get_db)):
-    """Lista todas as respostas já registradas de uma consulta."""
+    """Lists all the answers already recorded for a consultation."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -161,13 +161,13 @@ def gerar_heredograma(
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("consultas")),
 ):
     """
-    Usa a IA para analisar todas as respostas registradas na consulta
-    e gerar (ou regerar) os indivíduos e relacionamentos do heredograma.
-    Requer login.
+    Uses AI to analyze all the answers recorded in the consultation
+    and generate (or regenerate) the individuals and relationships of the pedigree.
+    Requires login.
 
-    Limitada a 60 requisições/minuto por IP (@limiter.limit) - é a rota
-    que consome a API paga da Anthropic, então é a mais importante de
-    proteger contra abuso. Excedido o limite, responde 429 Too Many Requests.
+    Limited to 60 requests/minute per IP (@limiter.limit) - it is the route
+    that consumes the paid Anthropic API, so it is the most important one to
+    protect against abuse. Once the limit is exceeded, responds 429 Too Many Requests.
     """
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
@@ -227,7 +227,7 @@ def gerar_heredograma(
 
 @router.get("/{consulta_id}/heredograma", response_model=HeredogramaResponse)
 def buscar_heredograma(consulta_id: int, db: Session = Depends(get_db)):
-    """Retorna o heredograma já gerado (sem chamar a IA de novo)."""
+    """Returns the already generated pedigree (without calling the AI again)."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")

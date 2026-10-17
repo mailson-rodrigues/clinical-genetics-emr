@@ -7,11 +7,11 @@ from conftest import gerar_heredograma_de_teste
 
 def test_gerar_hipoteses_e_buscar_mais_fontes(pagina_logada_admin):
     """
-    Mocka as chamadas de geração de hipóteses e de mais-fontes (nunca
-    chega a chamar a IA de verdade - mesmo padrão de mock via
-    page.route() já usado no teste do heredograma). Confirma o fluxo
-    completo: gerar hipóteses, ver a fonte inicial, clicar em "Buscar
-    mais fontes" e ver a nova fonte aparecer sem recarregar a página.
+    Mocks the hypothesis-generation and more-sources calls (it never
+    actually calls the AI - same mock pattern via
+    page.route() already used in the pedigree test). Confirms the full
+    flow: generate hypotheses, see the initial source, click "Buscar
+    mais fontes" and see the new source appear without reloading the page.
     """
     page = pagina_logada_admin
     consulta_id = gerar_heredograma_de_teste(page)
@@ -45,7 +45,7 @@ def test_gerar_hipoteses_e_buscar_mais_fontes(pagina_logada_admin):
 
     page.goto(f"/hipoteses.html?consulta_id={consulta_id}", wait_until="domcontentloaded")
 
-    # O aviso ético fica sempre visível, mesmo antes de gerar qualquer hipótese.
+    # The ethical notice is always visible, even before generating any hypothesis.
     expect(page.locator(".aviso-etico")).to_contain_text("não é um diagnóstico")
 
     page.click("#btnGerarHipoteses")
@@ -62,7 +62,7 @@ def test_gerar_hipoteses_e_buscar_mais_fontes(pagina_logada_admin):
     link_fonte = page.locator("#fontesHipotese1 a", has_text="Li-Fraumeni Syndrome")
     expect(link_fonte).to_have_attribute("href", "https://omim.org/entry/151623")
 
-    # "Buscar mais fontes" - a nova fonte deve aparecer sem recarregar a página.
+    # "Buscar mais fontes" - the new source must appear without reloading the page.
     hipotese_com_mais_fontes = dict(hipotese_fake)
     hipotese_com_mais_fontes["fontes"] = hipotese_fake["fontes"] + [
         {"id": 2, "titulo": "Nova fonte", "url": "https://pubmed.ncbi.nlm.nih.gov/999", "origem": "PubMed"},

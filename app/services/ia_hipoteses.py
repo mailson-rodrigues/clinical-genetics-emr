@@ -10,13 +10,13 @@ load_dotenv()
 
 client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-# Mesmo modelo já usado em ia_extracao.py (extração do heredograma) -
-# consistência com o resto do projeto para esse tipo de tarefa
-# (extração estruturada a partir de anamnese médica).
+# Same model already used in ia_extracao.py (pedigree extraction) -
+# consistency with the rest of the project for this type of task
+# (structured extraction from a medical anamnesis).
 MODELO = "claude-sonnet-5"
 
-# Domínios permitidos para a busca na web: PubMed, SciELO, Google
-# Acadêmico, OMIM, Orphanet, GARD/NIH, MedlinePlus.
+# Domains allowed for web search: PubMed, SciELO, Google
+# Scholar, OMIM, Orphanet, GARD/NIH, MedlinePlus.
 DOMINIOS_PERMITIDOS = [
     "pubmed.ncbi.nlm.nih.gov",
     "ncbi.nlm.nih.gov",
@@ -139,9 +139,9 @@ def _extrair_json_da_resposta(resposta):
             "A resposta da IA não contém nenhum bloco de texto. "
             f"Blocos recebidos: {[bloco.type for bloco in resposta.content]}"
         )
-    # Com a ferramenta de busca, a resposta pode ter vários blocos de
-    # texto intercalados com as buscas - o JSON final vem sempre no
-    # último, depois de toda a pesquisa ter terminado.
+    # With the search tool, the response may have several text
+    # blocks interleaved with the searches - the final JSON always comes in the
+    # last one, after all the research has finished.
     texto_resposta = blocos_texto[-1].text.strip()
     texto_resposta = texto_resposta.replace("```json", "").replace("```", "").strip()
 

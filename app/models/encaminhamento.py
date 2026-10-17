@@ -5,9 +5,9 @@ from app.database import Base
 
 class Encaminhamento(Base):
     """
-    Representa o encaminhamento de um paciente (no contexto de uma
-    consulta) para outro especialista, com base nos achados do
-    aconselhamento genético.
+    Represents the referral of a patient (in the context of a
+    consultation) to another specialist, based on the findings of the
+    genetic counseling.
     """
     __tablename__ = "encaminhamentos"
 

@@ -33,7 +33,7 @@ def _verificar_paciente(paciente_id: int, db: Session):
 
 
 # =====================================================================
-# ALERGIAS (requer login - dado clínico de paciente)
+# ALLERGIES (requires login - clinical patient data)
 # =====================================================================
 
 @router.post("/{paciente_id}/alergias", response_model=ItemClinicoResponse, status_code=201)
@@ -77,7 +77,7 @@ def remover_alergia(
 
 
 # =====================================================================
-# DOENÇAS (requer login)
+# DISEASES (requires login)
 # =====================================================================
 
 @router.post("/{paciente_id}/doencas", response_model=DoencaResponse, status_code=201)
@@ -171,7 +171,7 @@ def remover_cirurgia(
 
 
 # =====================================================================
-# HISTÓRICOS CLÍNICOS (requer login)
+# CLINICAL HISTORIES (requires login)
 # =====================================================================
 
 @router.post("/{paciente_id}/historicos", response_model=ItemClinicoResponse, status_code=201)
@@ -217,7 +217,7 @@ def remover_historico(
 
 
 # =====================================================================
-# CONVÊNIOS (vínculo paciente <-> operadora) - requer login
+# HEALTH PLANS (patient <-> insurer link) - requires login
 # =====================================================================
 
 @router.post("/{paciente_id}/convenios", response_model=PacienteConvenioResponse, status_code=201)
@@ -271,7 +271,7 @@ def remover_convenio_paciente(
 
 
 # =====================================================================
-# OPERADORAS (catálogo) - listagem aberta, criação exige ADMINISTRADOR
+# INSURERS (catalog) - open listing, creation requires ADMINISTRATOR
 # =====================================================================
 
 @router_operadoras.post("/", response_model=OperadoraResponse, status_code=201)

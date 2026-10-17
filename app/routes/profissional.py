@@ -20,7 +20,7 @@ router_especialidades = APIRouter(prefix="/especialidades", tags=["Especialidade
 
 
 # =====================================================================
-# ESPECIALIDADES (catálogo)
+# SPECIALTIES (catalog)
 # =====================================================================
 
 @router_especialidades.post("/", response_model=EspecialidadeResponse, status_code=201)
@@ -48,10 +48,10 @@ def listar_especialidades(db: Session = Depends(get_db)):
 @router.post("/", response_model=ProfissionalResponse, status_code=201)
 def criar_profissional(dados: ProfissionalCreate, db: Session = Depends(get_db)):
     """
-    Cadastra um novo profissional. A senha é convertida em hash antes de
-    salvar. Nota: a criação NÃO exige login, para permitir o cadastro do
-    primeiro administrador do sistema. Em produção real, considere
-    restringir esta rota depois que já existir ao menos um administrador.
+    Registers a new professional. The password is converted into a hash before
+    saving. Note: creation does NOT require login, to allow the registration of the
+    first administrator of the system. In real production, consider
+    restricting this route once at least one administrator exists.
     """
     existente = db.query(Profissional).filter(Profissional.email == dados.email).first()
     if existente:
@@ -106,8 +106,8 @@ def atualizar_profissional(
     _administrador: Profissional = Depends(exigir_administrador),
 ):
     """
-    Atualiza dados de um profissional (especialidade, registro, nível de
-    acesso, ativo/inativo). Requer login como ADMINISTRADOR.
+    Updates the data of a professional (specialty, registration, access
+    level, active/inactive). Requires login as ADMINISTRATOR.
     """
     profissional = db.query(Profissional).filter(Profissional.id == profissional_id).first()
     if not profissional:

@@ -6,9 +6,9 @@ function obterParametroURL(nome) {
 const pacienteId = obterParametroURL("paciente_id");
 
 // =====================================================================
-// Verifica permissão ANTES de carregar qualquer dado - evita que um
-// profissional comum veja o formulário preenchido, só para tomar um
-// erro 403 ao tentar salvar.
+// Checks permission BEFORE loading any data - prevents a
+// regular professional from seeing the filled-in form only to get a
+// 403 error when trying to save.
 // =====================================================================
 function verificarPermissao() {
   if (!ehAdministrador()) {
@@ -20,7 +20,7 @@ function verificarPermissao() {
 }
 
 // =====================================================================
-// Carrega os dados atuais do paciente e preenche o formulário
+// Loads the current patient data and fills in the form
 // =====================================================================
 async function carregarPaciente() {
   if (!pacienteId) {
@@ -64,7 +64,7 @@ async function carregarPaciente() {
 }
 
 // =====================================================================
-// Envia as alterações (PUT - requer admin)
+// Sends the changes (PUT - requires admin)
 // =====================================================================
 document.getElementById("formEditarPaciente").addEventListener("submit", async (evento) => {
   evento.preventDefault();
@@ -116,7 +116,7 @@ document.getElementById("formEditarPaciente").addEventListener("submit", async (
 });
 
 // =====================================================================
-// Remover paciente (DELETE - requer admin, com confirmação)
+// Remove patient (DELETE - requires admin, with confirmation)
 // =====================================================================
 document.getElementById("btnRemoverPaciente").addEventListener("click", async () => {
   const confirmou = confirm(
@@ -146,7 +146,7 @@ document.getElementById("btnRemoverPaciente").addEventListener("click", async ()
 });
 
 // =====================================================================
-// Inicialização
+// Initialization
 // =====================================================================
 preencherSelectUf(document.getElementById("uf"));
 inicializarBuscaCep();

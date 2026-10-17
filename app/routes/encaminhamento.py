@@ -23,7 +23,7 @@ def criar_encaminhamento(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(exigir_acesso_modulo("encaminhamentos")),
 ):
-    """Registra um encaminhamento para outro especialista. Requer login."""
+    """Registers a referral to another specialist. Requires login."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -47,7 +47,7 @@ def criar_encaminhamento(
 
 @router.get("/{consulta_id}/encaminhamentos", response_model=List[EncaminhamentoResponse])
 def listar_encaminhamentos(consulta_id: int, db: Session = Depends(get_db)):
-    """Lista os encaminhamentos registrados para uma consulta."""
+    """Lists the referrals registered for a consultation."""
     consulta = db.query(Consulta).filter(Consulta.id == consulta_id).first()
     if not consulta:
         raise HTTPException(status_code=404, detail="Consulta não encontrada.")
@@ -63,7 +63,7 @@ def atualizar_encaminhamento(
     db: Session = Depends(get_db),
     _profissional: Profissional = Depends(exigir_acesso_modulo("encaminhamentos")),
 ):
-    """Atualiza um encaminhamento (ex: marcar como concluído). Requer login."""
+    """Updates a referral (e.g. mark it as completed). Requires login."""
     encaminhamento = db.query(Encaminhamento).filter(
         Encaminhamento.id == encaminhamento_id,
         Encaminhamento.consulta_id == consulta_id,

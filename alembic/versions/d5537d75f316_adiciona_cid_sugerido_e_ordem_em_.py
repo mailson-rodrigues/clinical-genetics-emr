@@ -1,4 +1,4 @@
-"""adiciona cid_sugerido e ordem em hipoteses_diagnosticas
+"""adds cid_sugerido and ordem to hipoteses_diagnosticas
 
 Revision ID: d5537d75f316
 Revises: fc01370b6810

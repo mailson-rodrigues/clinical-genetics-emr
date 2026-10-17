@@ -14,17 +14,17 @@ EXPIRACAO_TOKEN_MINUTOS = 480  # 8 horas
 
 
 def gerar_hash_senha(senha_texto_puro: str) -> str:
-    """Transforma uma senha em texto puro em um hash seguro para salvar no banco."""
+    """Turns a plain-text password into a secure hash to store in the database."""
     return contexto_senha.hash(senha_texto_puro)
 
 
 def verificar_senha(senha_texto_puro: str, senha_hash: str) -> bool:
-    """Confere se uma senha digitada bate com o hash salvo no banco."""
+    """Checks whether a typed password matches the hash stored in the database."""
     return contexto_senha.verify(senha_texto_puro, senha_hash)
 
 
 def criar_token_acesso(dados: dict) -> str:
-    """Gera um token JWT assinado, contendo os dados informados + data de expiração."""
+    """Generates a signed JWT token, containing the given data + an expiration date."""
     dados_para_codificar = dados.copy()
     expira_em = datetime.now(timezone.utc) + timedelta(minutes=EXPIRACAO_TOKEN_MINUTOS)
     dados_para_codificar.update({"exp": expira_em})
@@ -33,7 +33,7 @@ def criar_token_acesso(dados: dict) -> str:
 
 def decodificar_token(token: str) -> dict:
     """
-    Decodifica e valida um token JWT. Lança jose.JWTError se o token for
-    inválido, adulterado, ou estiver expirado.
+    Decodes and validates a JWT token. Raises jose.JWTError if the token is
+    invalid, tampered with, or expired.
     """
     return jwt.decode(token, CHAVE_SECRETA, algorithms=[ALGORITMO])

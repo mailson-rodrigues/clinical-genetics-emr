@@ -32,19 +32,19 @@ from app.middlewares import middleware_log_auditoria
 
 app = FastAPI(title="Heredograma IA")
 
-# Rate limiting (slowapi) - protege rotas sensíveis (ex: a que chama a API
-# paga da Anthropic) contra abuso. O limite em si é declarado por rota via
-# @limiter.limit(...) (ver app/routes/consulta.py); aqui só registramos a
-# instância compartilhada e o handler que converte estouro de limite em
+# Rate limiting (slowapi) - protects sensitive routes (e.g. the one that calls the
+# paid Anthropic API) against abuse. The limit itself is declared per route via
+# @limiter.limit(...) (see app/routes/consulta.py); here we only register the
+# shared instance and the handler that converts exceeding the limit into
 # HTTP 429.
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
 
-# Em desenvolvimento local, sem nenhuma configuração extra, libera qualquer
-# origem ("*"). Em produção, defina ALLOWED_ORIGINS no .env com o(s)
-# domínio(s) real(is) do frontend, separados por vírgula, ex:
-#   ALLOWED_ORIGINS=https://app.exemplo.com,https://exemplo.com
+# In local development, with no extra configuration, any origin ("*")
+# is allowed. In production, set ALLOWED_ORIGINS in .env with the real
+# frontend domain(s), comma-separated, e.g.:
+#   ALLOWED_ORIGINS=https://app.example.com,https://example.com
 origens_permitidas_env = os.getenv("ALLOWED_ORIGINS")
 origens_permitidas = (
     [origem.strip() for origem in origens_permitidas_env.split(",")]

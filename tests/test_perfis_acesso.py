@@ -9,11 +9,11 @@ def cabecalho(token):
 
 def _criar_modulos_basicos(db_session):
     """
-    Idempotente: a fixture `profissional_token`/`profissional_info` (ver
-    tests/conftest.py) já cria esses mesmos 5 módulos como efeito
-    colateral (para montar o "Perfil Total (testes)") - reaproveita se
-    já existirem, em vez de tentar duplicar e violar a unique constraint
-    de Modulo.codigo.
+    Idempotent: the `profissional_token`/`profissional_info` fixture (see
+    tests/conftest.py) already creates these same 5 modules as a side
+    effect (to build the "Perfil Total (testes)") - reuses them if they
+    already exist, instead of trying to duplicate and violating the unique constraint
+    on Modulo.codigo.
     """
     modulos = {}
     for codigo, nome in [
@@ -34,7 +34,7 @@ def _criar_modulos_basicos(db_session):
 
 
 # =====================================================================
-# Módulos (catálogo, só leitura, admin-only)
+# Modules (catalog, read-only, admin-only)
 # =====================================================================
 
 def test_listar_modulos_requer_admin(client, db_session, profissional_token, admin_token):
@@ -49,7 +49,7 @@ def test_listar_modulos_requer_admin(client, db_session, profissional_token, adm
 
 
 # =====================================================================
-# CRUD de perfil de acesso (admin-only)
+# Access profile CRUD (admin-only)
 # =====================================================================
 
 def test_crud_perfil_acesso(client, profissional_token, admin_token):
@@ -68,8 +68,8 @@ def test_crud_perfil_acesso(client, profissional_token, admin_token):
     assert perfil["nome"] == "Recepcionista"
     assert perfil["modulos"] == []
 
-    # Não assume que "Recepcionista" é o único perfil existente - o
-    # fixture `profissional_token` também cria um "Perfil Total (testes)"
+    # Does not assume that "Recepcionista" is the only existing profile - the
+    # `profissional_token` fixture also creates a "Perfil Total (testes)"
     # como efeito colateral (ver tests/conftest.py).
     listagem = client.get("/perfis-acesso/", headers=cabecalho(admin_token))
     assert listagem.status_code == 200
@@ -101,7 +101,7 @@ def test_criar_perfil_com_nome_duplicado(client, admin_token):
 
 
 # =====================================================================
-# Vincular/desvincular módulo
+# Link/unlink a module
 # =====================================================================
 
 def test_vincular_e_desvincular_modulo(client, db_session, admin_token):
@@ -119,7 +119,7 @@ def test_vincular_e_desvincular_modulo(client, db_session, admin_token):
     assert len(vinculado.json()["modulos"]) == 1
     assert vinculado.json()["modulos"][0]["codigo"] == "pacientes"
 
-    # Vincular de novo o mesmo módulo não deve duplicar
+    # Linking the same module again must not duplicate it
     vinculado_de_novo = client.post(
         f"/perfis-acesso/{perfil['id']}/modulos",
         json={"modulo_id": modulos["pacientes"].id},
@@ -158,7 +158,7 @@ def test_remover_perfil_vinculado_a_profissional_e_bloqueado(client, db_session,
 
 
 # =====================================================================
-# exigir_acesso_modulo - comportamento de restrição de fato
+# exigir_acesso_modulo - actual restriction behavior
 # =====================================================================
 
 def _criar_e_logar_recepcionista(client, db_session):
@@ -192,9 +192,9 @@ def test_perfil_recepcionista_acessa_pacientes_mas_nao_consultas_ou_encaminhamen
 ):
     token = _criar_e_logar_recepcionista(client, db_session)
 
-    # Pacientes: rota de criação não é gated por perfil (não foi alterada
-    # nesta etapa - fica como já era), então qualquer um consegue, inclusive
-    # a recepcionista, confirmando que ela "consegue fazer algo em pacientes".
+    # Patients: the creation route is not gated by profile (it was not changed
+    # in this step - it stays as it was), so anyone can, including
+    # the receptionist, confirming that she "can do something in patients".
     resposta_paciente = client.post(
         "/pacientes/",
         json={"nome": "Outro Paciente", "data_nascimento": "1980-01-01", "sexo": "M", "documento": "22233344455"},
@@ -202,7 +202,7 @@ def test_perfil_recepcionista_acessa_pacientes_mas_nao_consultas_ou_encaminhamen
     )
     assert resposta_paciente.status_code == 201
 
-    # Consultas: módulo NÃO liberado para o perfil Recepcionista -> 403
+    # Consultations: module NOT released for the Recepcionista profile -> 403
     resposta_consulta = client.post(
         "/consultas/",
         json={"paciente_id": paciente_exemplo["id"], "condicao_investigada": "teste"},
@@ -210,8 +210,8 @@ def test_perfil_recepcionista_acessa_pacientes_mas_nao_consultas_ou_encaminhamen
     )
     assert resposta_consulta.status_code == 403
 
-    # Encaminhamentos: também não liberado -> 403 (mesmo que a consulta
-    # não exista de verdade, a checagem de perfil roda antes de tudo)
+    # Referrals: also not released -> 403 (even if the consultation
+    # does not really exist, the profile check runs before anything else)
     resposta_encaminhamento = client.post(
         "/consultas/999/encaminhamentos",
         json={"motivo": "teste"},
@@ -221,7 +221,7 @@ def test_perfil_recepcionista_acessa_pacientes_mas_nao_consultas_ou_encaminhamen
 
 
 def test_administrador_acessa_tudo_independente_de_perfil(client, admin_token, paciente_exemplo):
-    """Administrador nunca tem perfil_acesso_id, mas continua com acesso total."""
+    """An administrator never has a perfil_acesso_id, but keeps full access."""
     resposta_consulta = client.post(
         "/consultas/",
         json={"paciente_id": paciente_exemplo["id"], "condicao_investigada": "teste"},
@@ -238,7 +238,7 @@ def test_administrador_acessa_tudo_independente_de_perfil(client, admin_token, p
 
 
 def test_profissional_sem_perfil_algum_recebe_403(client, db_session, paciente_exemplo):
-    """Profissional comum sem NENHUM perfil_acesso_id vinculado não acessa módulos restritos."""
+    """A regular professional with NO perfil_acesso_id linked cannot access restricted modules."""
     profissional = Profissional(
         nome="Sem Perfil",
         email="sem.perfil@exemplo.com",

@@ -35,7 +35,7 @@ def _serializar_perfil(db: Session, perfil: PerfilAcesso) -> PerfilAcessoRespons
 
 
 # =====================================================================
-# MÓDULOS (catálogo fixo do sistema, só leitura)
+# MODULES (fixed system catalog, read-only)
 # =====================================================================
 
 @router_modulos.get("/", response_model=List[ModuloResponse])
@@ -43,12 +43,12 @@ def listar_modulos(
     db: Session = Depends(get_db),
     _administrador: Profissional = Depends(exigir_administrador),
 ):
-    """Lista o catálogo fixo de módulos do sistema. Requer login como ADMINISTRADOR."""
+    """Lists the fixed catalog of system modules. Requires login as ADMINISTRATOR."""
     return db.query(Modulo).order_by(Modulo.nome).all()
 
 
 # =====================================================================
-# PERFIS DE ACESSO
+# ACCESS PROFILES
 # =====================================================================
 
 @router.post("/", response_model=PerfilAcessoResponse, status_code=201)
@@ -57,7 +57,7 @@ def criar_perfil_acesso(
     db: Session = Depends(get_db),
     _administrador: Profissional = Depends(exigir_administrador),
 ):
-    """Cria um novo perfil de acesso. Requer login como ADMINISTRADOR."""
+    """Creates a new access profile. Requires login as ADMINISTRATOR."""
     existente = db.query(PerfilAcesso).filter(PerfilAcesso.nome == dados.nome).first()
     if existente:
         raise HTTPException(status_code=400, detail="Já existe um perfil de acesso com esse nome.")
@@ -74,7 +74,7 @@ def listar_perfis_acesso(
     db: Session = Depends(get_db),
     _administrador: Profissional = Depends(exigir_administrador),
 ):
-    """Lista os perfis de acesso cadastrados, cada um já com seus módulos vinculados."""
+    """Lists the registered access profiles, each already with its linked modules."""
     perfis = db.query(PerfilAcesso).order_by(PerfilAcesso.nome).all()
     return [_serializar_perfil(db, perfil) for perfil in perfis]
 
@@ -126,7 +126,7 @@ def remover_perfil_acesso(
     db: Session = Depends(get_db),
     _administrador: Profissional = Depends(exigir_administrador),
 ):
-    """Remove um perfil de acesso. Bloqueado se algum profissional ainda estiver vinculado a ele."""
+    """Removes an access profile. Blocked if any professional is still linked to it."""
     perfil = db.query(PerfilAcesso).filter(PerfilAcesso.id == perfil_id).first()
     if not perfil:
         raise HTTPException(status_code=404, detail="Perfil de acesso não encontrado.")

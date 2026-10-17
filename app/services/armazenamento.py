@@ -2,13 +2,13 @@ import os
 import uuid
 from pathlib import Path
 
-# Path relativo à raiz do projeto (mesma convenção do DATABASE_URL padrão
-# em app/database.py) - fora de frontend/, para não ficar acessível sem
-# autenticação via o mount de arquivos estáticos (StaticFiles em
-# app/main.py só serve frontend/). Configurável via env var UPLOAD_DIR
-# para os testes isolarem os arquivos gerados num diretório próprio (ver
-# tests/conftest.py e tests_e2e/conftest.py) - módulo lido dinamicamente
-# (não importado por nome) por quem usa, para o monkeypatch dos testes
+# Path relative to the project root (same convention as the default DATABASE_URL
+# in app/database.py) - outside frontend/, so it is not reachable without
+# authentication through the static files mount (StaticFiles in
+# app/main.py only serves frontend/). Configurable via the UPLOAD_DIR env var
+# so the tests can isolate the generated files in their own directory (see
+# tests/conftest.py and tests_e2e/conftest.py) - module read dynamically
+# (not imported by name) by whoever uses it, for the tests' monkeypatch
 # funcionar.
 DIRETORIO_UPLOADS = Path(os.getenv("UPLOAD_DIR", "uploads"))
 
@@ -24,9 +24,9 @@ _EXTENSAO_POR_TIPO = {
 
 def gerar_nome_armazenado(tipo_conteudo: str) -> str:
     """
-    Nome único gerado (uuid4 + extensão derivada do tipo de conteúdo, não
-    do nome original enviado) - nunca o nome original diretamente como
-    nome em disco, para evitar colisão e path traversal.
+    Generated unique name (uuid4 + extension derived from the content type, not
+    from the original uploaded name) - never the original name directly as
+    the name on disk, to avoid collisions and path traversal.
     """
     extensao = _EXTENSAO_POR_TIPO[tipo_conteudo]
     return f"{uuid.uuid4()}{extensao}"

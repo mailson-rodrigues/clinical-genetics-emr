@@ -1,8 +1,8 @@
 """
-Script para popular o catálogo de códigos CID-10 com uma lista curada
-de exemplo. Pressupõe que as tabelas já existem (via Alembic).
+Script to populate the catalog of CID-10 codes with a curated example
+list. Assumes the tables already exist (via Alembic).
 
-Como rodar:
+How to run:
     python seed_cids.py
 """
 

@@ -48,9 +48,9 @@ def _criar_anexo(
     paciente_id: int = None,
     exame_id: int = None,
 ) -> Anexo:
-    # Regra de negócio: um Anexo pertence a EXATAMENTE UM de paciente_id
-    # ou exame_id - garantido aqui por construção (cada rota chamadora
-    # abaixo passa só um dos dois), não pelo banco.
+    # Business rule: an Anexo belongs to EXACTLY ONE of paciente_id
+    # or exame_id - guaranteed here by construction (each calling route
+    # below passes only one of the two), not by the database.
     assert (paciente_id is None) != (exame_id is None), (
         "Anexo deve ter exatamente um de paciente_id/exame_id preenchido."
     )
@@ -74,7 +74,7 @@ def _criar_anexo(
 
 
 # =====================================================================
-# Anexos de PACIENTE
+# PATIENT attachments
 # =====================================================================
 
 @router_pacientes.post("/{paciente_id}/anexos", response_model=AnexoResponse, status_code=201)
@@ -99,7 +99,7 @@ def listar_anexos_paciente(
     db: Session = Depends(get_db),
     _profissional: Profissional = Depends(obter_profissional_atual),
 ):
-    """Lista os anexos (metadados, não o arquivo em si) de um paciente. Requer login."""
+    """Lists the attachments (metadata, not the file itself) of a patient. Requires login."""
     paciente = db.query(Paciente).filter(Paciente.id == paciente_id).first()
     if not paciente:
         raise HTTPException(status_code=404, detail="Paciente não encontrado.")
@@ -108,7 +108,7 @@ def listar_anexos_paciente(
 
 
 # =====================================================================
-# Anexos de EXAME
+# EXAM attachments
 # =====================================================================
 
 @router_exames.post("/{exame_id}/anexos", response_model=AnexoResponse, status_code=201)
@@ -118,7 +118,7 @@ async def enviar_anexo_exame(
     db: Session = Depends(get_db),
     profissional_atual: Profissional = Depends(obter_profissional_atual),
 ):
-    """Envia um arquivo (ex: resultado de exame escaneado) vinculado a um exame. Requer login."""
+    """Uploads a file (e.g. a scanned exam result) linked to an exam. Requires login."""
     exame = db.query(Exame).filter(Exame.id == exame_id).first()
     if not exame:
         raise HTTPException(status_code=404, detail="Exame não encontrado.")
@@ -133,7 +133,7 @@ def listar_anexos_exame(
     db: Session = Depends(get_db),
     _profissional: Profissional = Depends(obter_profissional_atual),
 ):
-    """Lista os anexos (metadados, não o arquivo em si) de um exame. Requer login."""
+    """Lists the attachments (metadata, not the file itself) of an exam. Requires login."""
     exame = db.query(Exame).filter(Exame.id == exame_id).first()
     if not exame:
         raise HTTPException(status_code=404, detail="Exame não encontrado.")
@@ -142,8 +142,8 @@ def listar_anexos_exame(
 
 
 # =====================================================================
-# Download e remoção (por id do anexo, independente de ser de paciente
-# ou exame)
+# Download and removal (by attachment id, regardless of whether it belongs to a patient
+# or an exam)
 # =====================================================================
 
 @router_anexos.get("/{anexo_id}/download")
@@ -153,9 +153,9 @@ def baixar_anexo(
     _profissional: Profissional = Depends(obter_profissional_atual),
 ):
     """
-    Retorna o arquivo de verdade. NÃO é uma rota pública (dados de
-    paciente são sensíveis) - diferente dos arquivos estáticos do
-    frontend, este download exige login.
+    Returns the actual file. This is NOT a public route (patient data
+    is sensitive) - unlike the frontend static files, this download
+    requires login.
     """
     anexo = db.query(Anexo).filter(Anexo.id == anexo_id).first()
     if not anexo:
@@ -174,7 +174,7 @@ def remover_anexo(
     db: Session = Depends(get_db),
     _profissional: Profissional = Depends(obter_profissional_atual),
 ):
-    """Remove o registro do banco E o arquivo físico do disco. Requer login."""
+    """Removes the database record AND the physical file from disk. Requires login."""
     anexo = db.query(Anexo).filter(Anexo.id == anexo_id).first()
     if not anexo:
         raise HTTPException(status_code=404, detail="Anexo não encontrado.")

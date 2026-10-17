@@ -17,7 +17,7 @@ def criar_cid(
     db: Session = Depends(get_db),
     _administrador: Profissional = Depends(exigir_administrador),
 ):
-    """Cadastra um novo código CID no catálogo. Requer login como ADMINISTRADOR."""
+    """Registers a new CID code in the catalog. Requires login as ADMINISTRATOR."""
     existente = db.query(Cid).filter(Cid.codigo == dados.codigo).first()
     if existente:
         raise HTTPException(status_code=400, detail="Este código CID já está cadastrado.")
@@ -32,9 +32,9 @@ def criar_cid(
 @router.get("/", response_model=List[CidResponse])
 def listar_cids(busca: Optional[str] = None, versao: Optional[str] = None, db: Session = Depends(get_db)):
     """
-    Lista os códigos CID cadastrados. Use ?busca=texto para filtrar por
-    código ou descrição (ex: ?busca=mama ou ?busca=C50), e/ou
-    ?versao=CID-10 (ou CID-11, quando existir) para filtrar pela versão.
+    Lists the registered CID codes. Use ?busca=text to filter by
+    code or description (e.g. ?busca=mama or ?busca=C50), and/or
+    ?versao=CID-10 (or CID-11, when it exists) to filter by version.
     """
     query = db.query(Cid)
     if busca:

@@ -1,4 +1,4 @@
-"""adiciona campo versao em cids
+"""adds versao field to cids
 
 Revision ID: 1fb83e3aa3f6
 Revises: 4faf3626c6b9

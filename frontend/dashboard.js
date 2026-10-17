@@ -3,9 +3,9 @@ function formatarDataHora(iso) {
 }
 
 // =====================================================================
-// Renderiza a lista de "Atividade recente" (últimas consultas) - se
-// vazia (sistema novo, sem nenhuma consulta ainda), mostra uma
-// chamada para ação em vez de uma lista vazia estranha.
+// Renders the "Atividade recente" (latest consultations) list - if
+// empty (new system, no consultation yet), shows a
+// call to action instead of an odd empty list.
 // =====================================================================
 function renderizarAtividadeRecente(itens) {
   const container = document.getElementById("listaAtividadeRecente");

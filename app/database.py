@@ -9,7 +9,7 @@ load_dotenv()
 # In local development, with no extra configuration, we use SQLite
 # (file "heredograma.db"). In production, set DATABASE_URL in .env
 # pointing to a Postgres, in the format:
-#   postgresql://usuario:senha@host:porta/nome_banco
+#   postgresql://user:password@host:port/database_name
 # and run `alembic upgrade head` to create the tables there - the rest of the
 # code (models, routes, Alembic) needs no changes.
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./heredograma.db")

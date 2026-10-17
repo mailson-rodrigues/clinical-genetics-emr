@@ -15,7 +15,7 @@ This system captures the family history as structured anamnesis data and generat
 pedigree from it, so the diagram is a view of the record rather than a separate artifact
 that drifts out of sync.
 
-Built by a biomedical scientist with 15+ years in clinical laboratory diagnostics and
+Built by a biomedical scientist with 18+ years in clinical laboratory diagnostics and
 postgraduate training in Medical Genetics and Genomics — the domain requirements come
 from practice, not from a specification.
 
@@ -186,9 +186,9 @@ PolyForm Noncommercial License 1.0.0 — see [LICENSE](LICENSE). Source-availabl
 
 ## Author
 
-**Mailson Rodrigues** — biomedical scientist, 15+ years in clinical laboratory
+**Mailson Rodrigues** — biomedical scientist, 18+ years in clinical laboratory
 diagnostics. Postgraduate training in Medical Genetics and Genomics, and in Biosafety.
-MBA in Data Analytics, BI and Big Data.
+MBA in Data Analytics, BI and Big Data (in progress, expected May 2027).
 
 - ORCID: [0000-0002-9281-5818](https://orcid.org/0000-0002-9281-5818)
 - LinkedIn: [mailson-rodrigues](https://linkedin.com/in/mailson-rodrigues)
